@@ -1,0 +1,219 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value="Sistem Tugas Modular"/>
+        <attribute name="authors" value="UcokButet"/>
+        <attribute name="about" value="Sistem dengan Functions"/>
+        <attribute name="saved" value="2025-11-18 09:13:39 PM"/>
+        <attribute name="created" value="SmVyZW1pO0pFUkVNSTsyMDI1LTExLTE4OzA4OjQ0OjI3IFBNOzIzMzc="/>
+        <attribute name="edited" value="SmVyZW1pO0pFUkVNSTsyMDI1LTExLTE4OzA5OjEzOjM5IFBNOzE7MjQ0NQ=="/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <declare name="MAX" type="Integer" array="False" size=""/>
+            <assign variable="MAX" expression="10"/>
+            <declare name="JlhData" type="Integer" array="False" size=""/>
+            <assign variable="JlhData" expression="0"/>
+            <declare name="Running" type="Boolean" array="False" size=""/>
+            <assign variable="Running" expression="True"/>
+            <declare name="Perintah" type="String" array="False" size=""/>
+            <declare name="KodeMK" type="String" array="True" size="MAX"/>
+            <declare name="NamaMK" type="String" array="True" size="MAX"/>
+            <declare name="Keterangan" type="String" array="True" size="MAX"/>
+            <declare name="Status" type="String" array="True" size="MAX"/>
+            <declare name="Deadline" type="Integer" array="True" size="MAX"/>
+            <declare name="Kesulitan" type="Integer" array="True" size="MAX"/>
+            <declare name="Prioritas" type="Real" array="True" size="MAX"/>
+            <while expression="Running">
+                <input variable="Perintah"/>
+                <if expression="Perintah == &quot;Add task&quot;">
+                    <then>
+                        <if expression="JlhData &lt; MAX">
+                            <then>
+                                <assign variable="JlhData" expression="TambahTugas(JlhData, KodeMK, NamaMK, Deadline, Kesulitan, Keterangan, Status, Prioritas)"/>
+                            </then>
+                            <else>
+                                <output expression="&quot;Array Penuh!&quot;" newline="True"/>
+                            </else>
+                        </if>
+                    </then>
+                    <else>
+                        <if expression="Perintah == &quot;(Update task status)&quot;">
+                            <then>
+                                <call expression="UpdateStatus(JlhData, KodeMK, Status)"/>
+                            </then>
+                            <else>
+                                <if expression="Perintah == &quot;(Show assignment)&quot;">
+                                    <then>
+                                        <call expression="TampilTugas(JlhData, KodeMK, NamaMK, Status, Deadline, Kesulitan, Keterangan, Prioritas)"/>
+                                    </then>
+                                    <else>
+                                        <if expression="Perintah == &quot;Exit&quot;">
+                                            <then>
+                                                <assign variable="Running" expression="False"/>
+                                            </then>
+                                            <else>
+                                                <output expression="&quot;Perintah salah.&quot;" newline="True"/>
+                                            </else>
+                                        </if>
+                                    </else>
+                                </if>
+                            </else>
+                        </if>
+                    </else>
+                </if>
+            </while>
+        </body>
+    </function>
+    <function name="TambahTugas" type="String" variable="NewCount">
+        <parameters>
+            <parameter name="CurrentCount" type="Integer" array="False"/>
+            <parameter name="KodeMK" type="String" array="True"/>
+            <parameter name="NamaMK" type="String" array="True"/>
+            <parameter name="Deadline" type="Integer" array="True"/>
+            <parameter name="Kesulitan" type="Integer" array="True"/>
+            <parameter name="Keterangan" type="String" array="True"/>
+            <parameter name="Status" type="String" array="True"/>
+            <parameter name="Prioritas" type="Real" array="True"/>
+        </parameters>
+        <body>
+            <declare name="NewCount" type="Integer" array="False" size=""/>
+            <input variable="NamaMK[CurrentCount]"/>
+            <input variable="KodeMK[CurrentCount]"/>
+            <input variable="Deadline[CurrentCount]"/>
+            <input variable="Kesulitan[CurrentCount]"/>
+            <input variable="Keterangan[CurrentCount]"/>
+            <if expression="Keterangan[CurrentCount] == &quot;---&quot;">
+                <then>
+                    <output expression="&quot;Input Dibatalkan.&quot;" newline="True"/>
+                    <assign variable="NewCount" expression="CurrentCount"/>
+                </then>
+                <else>
+                    <output expression="&quot;Masukkan Status (Belum/Selesai):&quot;" newline="True"/>
+                    <input variable="Status[CurrentCount]"/>
+                    <if expression="Deadline[CurrentCount] &gt; 0">
+                        <then>
+                            <assign variable="Prioritas[CurrentCount]" expression="Kesulitan[CurrentCount] * (1.0 / Deadline[CurrentCount])"/>
+                        </then>
+                        <else>
+                            <assign variable="Prioritas[CurrentCount]" expression="Kesulitan[CurrentCount] * 100"/>
+                        </else>
+                    </if>
+                    <assign variable="NewCount" expression="CurrentCount + 1"/>
+                    <output expression="&quot;Berhasil Disimpan.&quot;" newline="True"/>
+                </else>
+            </if>
+        </body>
+    </function>
+    <function name="TampilTugas" type="None" variable="">
+        <parameters>
+            <parameter name="JlhData" type="Integer" array="False"/>
+            <parameter name="KodeMK" type="String" array="True"/>
+            <parameter name="NamaMK" type="String" array="True"/>
+            <parameter name="Status" type="String" array="True"/>
+            <parameter name="Deadline" type="Integer" array="True"/>
+            <parameter name="Kesulitan" type="Integer" array="True"/>
+            <parameter name="Keterangan" type="String" array="True"/>
+            <parameter name="Prioritas" type="Real" array="True"/>
+        </parameters>
+        <body>
+            <declare name="i, j" type="Integer" array="False" size=""/>
+            <declare name="TempPrio" type="Real" array="False" size=""/>
+            <declare name="TempKode, TempNama, TempStat, TempKet" type="String" array="False" size=""/>
+            <declare name="TempDead, TempSulit" type="Integer" array="False" size=""/>
+            <for variable="i" start="0" end="JlhData - 2" direction="inc" step="1">
+                <for variable="j" start="0" end="JlhData - 2 - i" direction="inc" step="1">
+                    <if expression="Prioritas[j] &lt; Prioritas[j+1]">
+                        <then>
+                            <assign variable="TempPrio" expression="Prioritas[j]"/>
+                            <assign variable="Prioritas[j]" expression="Prioritas[j+1]"/>
+                            <assign variable="Prioritas[j+1]" expression="TempPrio"/>
+                            <assign variable="TempKode" expression="KodeMK[j]"/>
+                            <assign variable="KodeMK[j]" expression="KodeMK[j+1]"/>
+                            <assign variable="KodeMK[j+1]" expression="TempKode"/>
+                            <assign variable="TempNama" expression="NamaMK[j]"/>
+                            <assign variable="NamaMK[j]" expression="NamaMK[j+1]"/>
+                            <assign variable="NamaMK[j+1]" expression="TempNama"/>
+                            <assign variable="TempStat" expression="Status[j]"/>
+                            <assign variable="Status[j]" expression="Status[j+1]"/>
+                            <assign variable="Status[j+1]" expression="TempStat"/>
+                            <assign variable="TempDead" expression="Deadline[j]"/>
+                            <assign variable="Deadline[j]" expression="Deadline[j+1]"/>
+                            <assign variable="Deadline[j+1]" expression="TempDead"/>
+                            <assign variable="TempSulit" expression="Kesulitan[j]"/>
+                            <assign variable="Kesulitan[j]" expression="Kesulitan[j+1]"/>
+                            <assign variable="Kesulitan[j+1]" expression="TempSulit"/>
+                            <assign variable="TempKet" expression="Keterangan[j]"/>
+                            <assign variable="Keterangan[j]" expression="Keterangan[j+1]"/>
+                            <assign variable="Keterangan[j+1]" expression="TempKet"/>
+                        </then>
+                        <else/>
+                    </if>
+                </for>
+            </for>
+            <output expression="&quot;--- DAFTAR TUGAS (URUT PRIORITAS) ---&quot;" newline="True"/>
+            <for variable="i" start="0" end="JlhData - 1" direction="inc" step="1">
+                <output expression="&quot;[Kode: &quot; &amp; KodeMK[i] &amp; &quot;] &quot; &amp; NamaMK[i]" newline="True"/>
+                <output expression="&quot;Status: &quot; &amp; Status[i]" newline="True"/>
+                <output expression="&quot;Prioritas: &quot; &amp; Prioritas[i]" newline="True"/>
+                <if expression="Prioritas[i] &gt; 3">
+                    <then>
+                        <output expression="&quot;&gt;&gt; PENTING! Kerjakan segera.&quot;" newline="True"/>
+                    </then>
+                    <else>
+                        <if expression="Prioritas[i] &gt;= 1.5">
+                            <then>
+                                <output expression="&quot;&gt;&gt; Prioritas Menengah.&quot;" newline="True"/>
+                            </then>
+                            <else>
+                                <output expression="&quot;&gt;&gt; Tugas Ringan.&quot;" newline="True"/>
+                            </else>
+                        </if>
+                    </else>
+                </if>
+                <if expression="Status[i] == &quot;Selesai&quot;">
+                    <then/>
+                    <else>
+                        <output expression="&quot;Deadline: &quot; &amp; Deadline[i] &amp; &quot; hari&quot;" newline="True"/>
+                        <output expression="&quot;Keterangan: &quot; &amp; Keterangan[i]" newline="True"/>
+                    </else>
+                </if>
+                <output expression="&quot;--------------------------------&quot;" newline="True"/>
+            </for>
+        </body>
+    </function>
+    <function name="UpdateStatus" type="None" variable="">
+        <parameters>
+            <parameter name="JlhData" type="Integer" array="False"/>
+            <parameter name="KodeMK" type="String" array="True"/>
+            <parameter name="Status" type="String" array="True"/>
+        </parameters>
+        <body>
+            <declare name="CariKode, StatusBaru" type="String" array="False" size=""/>
+            <declare name="Found" type="Boolean" array="False" size=""/>
+            <declare name="i" type="Integer" array="False" size=""/>
+            <output expression="&quot;Kode Mata Kuliah yang diupdate:&quot;" newline="True"/>
+            <input variable="CariKode"/>
+            <output expression="&quot;Status Baru:&quot;" newline="True"/>
+            <input variable="StatusBaru"/>
+            <assign variable="Found" expression="False"/>
+            <for variable="i" start="0" end="JlhData - 1" direction="inc" step="1">
+                <if expression="KodeMK[i] == CariKode">
+                    <then>
+                        <assign variable="Status[i]" expression="StatusBaru"/>
+                        <assign variable="Found" expression="True"/>
+                        <output expression="&quot;Status Berhasil Diupdate!&quot;" newline="True"/>
+                    </then>
+                    <else/>
+                </if>
+            </for>
+            <if expression="!Found">
+                <then>
+                    <output expression="&quot;Kode tidak ditemukan.&quot;" newline="True"/>
+                </then>
+                <else/>
+            </if>
+        </body>
+    </function>
+</flowgorithm>
