@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <flowgorithm fileversion="3.0">
     <attributes>
-        <attribute name="name" value="T01_TutorTaskManagement"/>
+        <attribute name="name" value="TLAST"/>
         <attribute name="authors" value="UcokButet"/>
-        <attribute name="about" value="Sistem Manajemen Tugas dengan Fungsi dan Array"/>
+        <attribute name="about" value="Task Management System with Update Feature"/>
         <attribute name="saved" value="2023-11-16"/>
     </attributes>
     <function name="Main" type="None" variable="">
@@ -40,7 +40,7 @@
                                     <else>
                                         <if expression="command == &quot;Show assigment&quot; || command == &quot;Show assignment&quot;">
                                             <then>
-                                                <call expression="ShowAssignment(n, descriptions, codes, courseNames, lecturers, deadlines, subIDs, statuses, priorities)"/>
+                                                <call expression="ShowAssignment(n, descriptions, codes, courseNames, lecturers, deadlines, subIDs, statuses, priorities, diffs, days)"/>
                                             </then>
                                             <else/>
                                         </if>
@@ -79,7 +79,14 @@
                     <input variable="diffs[n]"/>
                     <input variable="days[n]"/>
                     <input variable="statuses[n]"/>
-                    <assign variable="priorities[n]" expression="diffs[n] * (1.0 / days[n])"/>
+                    <if expression="days[n] == 0">
+                        <then>
+                            <assign variable="priorities[n]" expression="diffs[n] * 1.0"/>
+                        </then>
+                        <else>
+                            <assign variable="priorities[n]" expression="diffs[n] * (1.0 / days[n])"/>
+                        </else>
+                    </if>
                     <assign variable="n" expression="n + 1"/>
                 </then>
                 <else/>
@@ -119,11 +126,14 @@
             <parameter name="subIDs" type="String" array="True"/>
             <parameter name="statuses" type="String" array="True"/>
             <parameter name="priorities" type="Real" array="True"/>
+            <parameter name="diffs" type="Integer" array="True"/>
+            <parameter name="days" type="Integer" array="True"/>
         </parameters>
         <body>
             <declare name="i, j" type="Integer" array="False" size=""/>
             <declare name="tempStr" type="String" array="False" size=""/>
             <declare name="tempReal" type="Real" array="False" size=""/>
+            <declare name="tempInt" type="Integer" array="False" size=""/>
             <for variable="i" start="0" end="n - 1" direction="inc" step="1">
                 <for variable="j" start="0" end="n - 2 - i" direction="inc" step="1">
                     <if expression="priorities[j] &lt; priorities[j+1]">
@@ -152,6 +162,12 @@
                             <assign variable="tempStr" expression="statuses[j]"/>
                             <assign variable="statuses[j]" expression="statuses[j+1]"/>
                             <assign variable="statuses[j+1]" expression="tempStr"/>
+                            <assign variable="tempInt" expression="diffs[j]"/>
+                            <assign variable="diffs[j]" expression="diffs[j+1]"/>
+                            <assign variable="diffs[j+1]" expression="tempInt"/>
+                            <assign variable="tempInt" expression="days[j]"/>
+                            <assign variable="days[j]" expression="days[j+1]"/>
+                            <assign variable="days[j+1]" expression="tempInt"/>
                         </then>
                         <else/>
                     </if>

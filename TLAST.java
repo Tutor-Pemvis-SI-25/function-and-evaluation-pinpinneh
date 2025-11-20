@@ -34,7 +34,7 @@ public class TLAST {
                         updateTask(n, codes, statuses);
                     } else {
                         if (command.equals("Show assigment") || command.equals("Show assignment")) {
-                            showAssignment(n, descriptions, codes, courseNames, lecturers, deadlines, subIDs, statuses, priorities);
+                            showAssignment(n, descriptions, codes, courseNames, lecturers, deadlines, subIDs, statuses, priorities, diffs, days);
                         }
                     }
                 }
@@ -53,15 +53,20 @@ public class TLAST {
             diffs[n] = Integer.parseInt(input.nextLine());
             days[n] = Integer.parseInt(input.nextLine());
             statuses[n] = input.nextLine();
-            priorities[n] = diffs[n] * 1.0 / days[n];
+            if (days[n] == 0) {
+                priorities[n] = diffs[n] * 1.0;
+            } else {
+                priorities[n] = diffs[n] * 1.0 / days[n];
+            }
             n = n + 1;
         }
     }
     
-    public static void showAssignment(int n, String[] descriptions, String[] codes, String[] courseNames, String[] lecturers, String[] deadlines, String[] subIDs, String[] statuses, double[] priorities) {
+    public static void showAssignment(int n, String[] descriptions, String[] codes, String[] courseNames, String[] lecturers, String[] deadlines, String[] subIDs, String[] statuses, double[] priorities, int[] diffs, int[] days) {
         int i, j;
         String tempStr;
         double tempReal;
+        int tempInt;
 
         for (i = 0; i <= n - 1; i++) {
             for (j = 0; j <= n - 2 - i; j++) {
@@ -90,6 +95,12 @@ public class TLAST {
                     tempStr = statuses[j];
                     statuses[j] = statuses[j + 1];
                     statuses[j + 1] = tempStr;
+                    tempInt = diffs[j];
+                    diffs[j] = diffs[j + 1];
+                    diffs[j + 1] = tempInt;
+                    tempInt = days[j];
+                    days[j] = days[j + 1];
+                    days[j + 1] = tempInt;
                 }
             }
         }
