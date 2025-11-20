@@ -3,7 +3,7 @@
     <attributes>
         <attribute name="name" value="TLAST"/>
         <attribute name="authors" value="UcokButet"/>
-        <attribute name="about" value="Task Management System with Update Feature"/>
+        <attribute name="about" value="Task Management Fixed Output"/>
         <attribute name="saved" value="2023-11-16"/>
     </attributes>
     <function name="Main" type="None" variable="">
