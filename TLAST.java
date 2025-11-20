@@ -7,153 +7,128 @@ public class TLAST {
     private static Scanner input = new Scanner(System.in);
 
     public static void main(String[] args) {
-        int mAX;
+        String[] descriptions = new String[10];
+        String[] codes = new String[10];
+        String[] courseNames = new String[10];
+        String[] lecturers = new String[10];
+        String[] deadlines = new String[10];
+        String[] subIDs = new String[10];
+        int[] diffs = new int[10];
+        int[] days = new int[10];
+        String[] statuses = new String[10];
+        double[] priorities = new double[10];
+        int n;
 
-        mAX = 10;
-        int jlhData;
+        n = 0;
+        String command;
 
-        jlhData = 0;
-        boolean running;
-
-        running = true;
-        String perintah;
-        String[] kodeMK = new String[mAX];
-        String[] namaMK = new String[mAX];
-        String[] keterangan = new String[mAX];
-        String[] status = new String[mAX];
-        int[] deadline = new int[mAX];
-        int[] kesulitan = new int[mAX];
-        double[] prioritas = new double[mAX];
-
-        while (running) {
-            perintah = input.nextLine();
-            if (perintah.equals("Add task")) {
-                if (jlhData < mAX) {
-                    jlhData = tambahTugas(jlhData, kodeMK, namaMK, deadline, kesulitan, keterangan, status, prioritas);
-                } else {
-                    System.out.println("Array Penuh!");
-                }
+        command = "";
+        while (!command.equals("---")) {
+            command = input.nextLine();
+            if (command.equals("---")) {
             } else {
-                if (perintah.equals("(Update task status)")) {
-                    updateStatus(jlhData, kodeMK, status);
+                if (command.equals("Add task")) {
+                    addTask(n, descriptions, codes, courseNames, lecturers, deadlines, subIDs, diffs, days, statuses, priorities);
                 } else {
-                    if (perintah.equals("(Show assignment)")) {
-                        tampilTugas(jlhData, kodeMK, namaMK, status, deadline, kesulitan, keterangan, prioritas);
+                    if (command.equals("Update task status")) {
+                        updateTask(n, codes, statuses);
                     } else {
-                        if (perintah.equals("Exit")) {
-                            running = false;
-                        } else {
-                            System.out.println("Perintah salah.");
+                        if (command.equals("Show assigment") || command.equals("Show assignment")) {
+                            showAssignment(n, descriptions, codes, courseNames, lecturers, deadlines, subIDs, statuses, priorities);
                         }
                     }
                 }
             }
         }
     }
-
-    public static String tambahTugas(int currentCount, String[] kodeMK, String[] namaMK, int[] deadline,
-            int[] kesulitan, String[] keterangan, String[] status, double[] prioritas) {
-        int newCount;
-
-        namaMK[currentCount] = input.nextLine();
-        kodeMK[currentCount] = input.nextLine();
-        deadline[currentCount] = Integer.parseInt(input.nextLine());
-        kesulitan[currentCount] = Integer.parseInt(input.nextLine());
-        keterangan[currentCount] = input.nextLine();
-        if (keterangan[currentCount].equals("---")) {
-            System.out.println("Input Dibatalkan.");
-            newCount = currentCount;
-        } else {
-            System.out.println("Masukkan Status (Belum/Selesai):");
-            status[currentCount] = input.nextLine();
-            if (deadline[currentCount] > 0) {
-                prioritas[currentCount] = kesulitan[currentCount] * 1.0 / deadline[currentCount];
-            } else {
-                prioritas[currentCount] = kesulitan[currentCount] * 100;
-            }
-            newCount = currentCount + 1;
-            System.out.println("Berhasil Disimpan.");
+    
+    public static void addTask(int n, String[] descriptions, String[] codes, String[] courseNames, String[] lecturers, String[] deadlines, String[] subIDs, int[] diffs, int[] days, String[] statuses, double[] priorities) {
+        if (n < 10) {
+            descriptions[n] = input.nextLine();
+            codes[n] = input.nextLine();
+            courseNames[n] = input.nextLine();
+            lecturers[n] = input.nextLine();
+            deadlines[n] = input.nextLine();
+            subIDs[n] = input.nextLine();
+            diffs[n] = Integer.parseInt(input.nextLine());
+            days[n] = Integer.parseInt(input.nextLine());
+            statuses[n] = input.nextLine();
+            priorities[n] = diffs[n] * 1.0 / days[n];
+            n = n + 1;
         }
-
-        return newCount;
     }
-
-    public static void tampilTugas(int jlhData, String[] kodeMK, String[] namaMK, String[] status, int[] deadline,
-            int[] kesulitan, String[] keterangan, double[] prioritas) {
+    
+    public static void showAssignment(int n, String[] descriptions, String[] codes, String[] courseNames, String[] lecturers, String[] deadlines, String[] subIDs, String[] statuses, double[] priorities) {
         int i, j;
-        double tempPrio;
-        String tempKode, tempNama, tempStat, tempKet;
-        int tempDead, tempSulit;
+        String tempStr;
+        double tempReal;
 
-        for (i = 0; i <= jlhData - 2; i++) {
-            for (j = 0; j <= jlhData - 2 - i; j++) {
-                if (prioritas[j] < prioritas[j + 1]) {
-                    tempPrio = prioritas[j];
-                    prioritas[j] = prioritas[j + 1];
-                    prioritas[j + 1] = tempPrio;
-                    tempKode = kodeMK[j];
-                    kodeMK[j] = kodeMK[j + 1];
-                    kodeMK[j + 1] = tempKode;
-                    tempNama = namaMK[j];
-                    namaMK[j] = namaMK[j + 1];
-                    namaMK[j + 1] = tempNama;
-                    tempStat = status[j];
-                    status[j] = status[j + 1];
-                    status[j + 1] = tempStat;
-                    tempDead = deadline[j];
-                    deadline[j] = deadline[j + 1];
-                    deadline[j + 1] = tempDead;
-                    tempSulit = kesulitan[j];
-                    kesulitan[j] = kesulitan[j + 1];
-                    kesulitan[j + 1] = tempSulit;
-                    tempKet = keterangan[j];
-                    keterangan[j] = keterangan[j + 1];
-                    keterangan[j + 1] = tempKet;
+        for (i = 0; i <= n - 1; i++) {
+            for (j = 0; j <= n - 2 - i; j++) {
+                if (priorities[j] < priorities[j + 1]) {
+                    tempReal = priorities[j];
+                    priorities[j] = priorities[j + 1];
+                    priorities[j + 1] = tempReal;
+                    tempStr = descriptions[j];
+                    descriptions[j] = descriptions[j + 1];
+                    descriptions[j + 1] = tempStr;
+                    tempStr = codes[j];
+                    codes[j] = codes[j + 1];
+                    codes[j + 1] = tempStr;
+                    tempStr = courseNames[j];
+                    courseNames[j] = courseNames[j + 1];
+                    courseNames[j + 1] = tempStr;
+                    tempStr = lecturers[j];
+                    lecturers[j] = lecturers[j + 1];
+                    lecturers[j + 1] = tempStr;
+                    tempStr = deadlines[j];
+                    deadlines[j] = deadlines[j + 1];
+                    deadlines[j + 1] = tempStr;
+                    tempStr = subIDs[j];
+                    subIDs[j] = subIDs[j + 1];
+                    subIDs[j + 1] = tempStr;
+                    tempStr = statuses[j];
+                    statuses[j] = statuses[j + 1];
+                    statuses[j + 1] = tempStr;
                 }
             }
         }
-        System.out.println("--- DAFTAR TUGAS (URUT PRIORITAS) ---");
-        for (i = 0; i <= jlhData - 1; i++) {
-            System.out.println("[Kode: " + kodeMK[i] + "] " + namaMK[i]);
-            System.out.println("Status: " + status[i]);
-            System.out.println("Prioritas: " + prioritas[i]);
-            if (prioritas[i] > 3) {
-                System.out.println(">> PENTING! Kerjakan segera.");
+        String rekomendasi;
+
+        for (i = 0; i <= n - 1; i++) {
+            System.out.println("Prioritas: " + toFixed(priorities[i],2));
+            if (statuses[i].equals("Selesai")) {
+                System.out.println(descriptions[i] + "|" + codes[i] + "|" + courseNames[i] + "|" + lecturers[i] + "|" + subIDs[i] + "|" + statuses[i]);
             } else {
-                if (prioritas[i] >= 1.5) {
-                    System.out.println(">> Prioritas Menengah.");
+                if (priorities[i] > 3) {
+                    rekomendasi = "Penting! Anda harus mengerjakan tugas ini segera";
                 } else {
-                    System.out.println(">> Tugas Ringan.");
+                    if (priorities[i] >= 1.5) {
+                        rekomendasi = "Tugas ini memiliki prioritas menengah";
+                    } else {
+                        rekomendasi = "Tugas ini relatif ringan, namun jangan tunda terlalu lama";
+                    }
                 }
+                System.out.println(descriptions[i] + "|" + codes[i] + "|" + courseNames[i] + "|" + lecturers[i] + "|" + deadlines[i] + "|" + subIDs[i] + "|" + statuses[i] + "|" + rekomendasi);
             }
-            if (status[i].equals("Selesai")) {
-            } else {
-                System.out.println("Deadline: " + deadline[i] + " hari");
-                System.out.println("Keterangan: " + keterangan[i]);
-            }
-            System.out.println("--------------------------------");
         }
     }
-
-    public static void updateStatus(int jlhData, String[] kodeMK, String[] status) {
-        String cariKode, statusBaru;
-        boolean found;
+    
+    public static void updateTask(int n, String[] codes, String[] statuses) {
+        String searchCode;
+        String newStatus;
         int i;
 
-        System.out.println("Kode Mata Kuliah yang diupdate:");
-        cariKode = input.nextLine();
-        System.out.println("Status Baru:");
-        statusBaru = input.nextLine();
-        found = false;
-        for (i = 0; i <= jlhData - 1; i++) {
-            if (kodeMK[i].equals(cariKode)) {
-                status[i] = statusBaru;
-                found = true;
-                System.out.println("Status Berhasil Diupdate!");
+        searchCode = input.nextLine();
+        newStatus = input.nextLine();
+        for (i = 0; i <= n - 1; i++) {
+            if (codes[i].equals(searchCode)) {
+                statuses[i] = newStatus;
             }
         }
-        if (!found) {
-            System.out.println("Kode tidak ditemukan.");
-        }
+    }
+    
+    private static String toFixed(double value, int digits) {
+        return String.format("%." + digits + "f", value);
     }
 }
