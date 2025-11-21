@@ -3,6 +3,9 @@
 import java.util.*;
 import java.lang.Math;
 
+import java.util.*;
+import java.lang.Math;
+
 public class TLAST {
     private static Scanner input = new Scanner(System.in);
 
@@ -36,7 +39,7 @@ public class TLAST {
                     } else {
                         if (command.equals("Show assigment") || command.equals("Show assignment")) {
                             showAssignment(n, descriptions, codes, courseNames, lecturers, deadlines, subIDs, statuses,
-                                    priorities, diffs, days, kets);
+                                    priorities, diffs, days);
                         }
                     }
                 }

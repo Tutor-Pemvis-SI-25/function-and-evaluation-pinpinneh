@@ -4,6 +4,9 @@
         <attribute name="name" value="Task Management System Fixed"/>
         <attribute name="authors" value="UcokButet"/>
         <attribute name="about" value="Fixed Logic for Show and Main"/>
+        <attribute name="saved" value="2025-11-21 08:57:32 AM"/>
+        <attribute name="created" value="SmVyZW1pO0pFUkVNSTsyMDI1LTExLTIxOzA4OjUwOjU5IEFNOzIzMTg="/>
+        <attribute name="edited" value="SmVyZW1pO0pFUkVNSTsyMDI1LTExLTIxOzA4OjU3OjMyIEFNOzE7MjQyNA=="/>
     </attributes>
     <function name="Main" type="None" variable="">
         <parameters/>
@@ -39,7 +42,7 @@
                                     <else>
                                         <if expression="command == &quot;Show assigment&quot; || command == &quot;Show assignment&quot;">
                                             <then>
-                                                <call expression="ShowAssignment(n, descriptions, codes, courseNames, lecturers, deadlines, subIDs, statuses, priorities, diffs, days, kets)"/>
+                                                <call expression="ShowAssignment(n, descriptions, codes, courseNames, lecturers, deadlines, subIDs, statuses, priorities, diffs, days)"/>
                                             </then>
                                             <else/>
                                         </if>
@@ -113,7 +116,6 @@
             <declare name="rekomendasi" type="String" array="False" size=""/>
             <declare name="tempReal" type="Real" array="False" size=""/>
             <declare name="tempInt" type="Integer" array="False" size=""/>
-            
             <for variable="i" start="0" end="n - 1" direction="inc" step="1">
                 <for variable="j" start="0" end="n - 2 - i" direction="inc" step="1">
                     <if expression="priorities[j] &lt; priorities[j+1]">
@@ -153,10 +155,8 @@
                     </if>
                 </for>
             </for>
-            
             <for variable="i" start="0" end="n - 1" direction="inc" step="1">
                 <output expression="&quot;Prioritas: &quot; &amp; ToFixed(priorities[i], 2)" newline="True"/>
-                
                 <if expression="statuses[i] == &quot;Selesai&quot;">
                     <then>
                         <output expression="descriptions[i] &amp; &quot;|&quot; &amp; codes[i] &amp; &quot;|&quot; &amp; courseNames[i] &amp; &quot;|&quot; &amp; lecturers[i] &amp; &quot;|&quot; &amp; subIDs[i] &amp; &quot;|&quot; &amp; statuses[i]" newline="True"/>
