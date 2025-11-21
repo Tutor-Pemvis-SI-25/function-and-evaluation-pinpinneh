@@ -1,12 +1,10 @@
 <?xml version="1.0"?>
 <flowgorithm fileversion="4.2">
     <attributes>
-        <attribute name="name" value="TLAST_FIXED"/>
+        <attribute name="name" value="TLAST_FINAL_V2"/>
         <attribute name="authors" value="UcokButet"/>
-        <attribute name="about" value="Task Management Fixed Output - 5 Functions"/>
-        <attribute name="saved" value="2025-11-21 09:33:43 PM"/>
-        <attribute name="created" value="SmVyZW1pO0pFUkVNSTsyMDI1LTExLTIxOzA4OjI2OjEzIFBNOzIzMjY="/>
-        <attribute name="edited" value="SmVyZW1pO0pFUkVNSTsyMDI1LTExLTIxOzA5OjMzOjQzIFBNOzQ7MjQzOQ=="/>
+        <attribute name="about" value="Task Management System - Fixed Init Error"/>
+        <attribute name="saved" value="2025-11-21 09:55:00 PM"/>
     </attributes>
     <function name="Main" type="None" variable="">
         <parameters/>
@@ -54,12 +52,11 @@
                     </else>
                 </if>
             </while>
-            <call expression="ShowAssignment(n, descriptions, codes, courseNames, lecturers, deadlines, subIDs, statuses, priorities)"/>
         </body>
     </function>
     <function name="AddTask" type="None" variable="">
         <parameters>
-            <parameter name="n" type="Integer" array="False"/>
+            <parameter name="n" type="Integer" array="False" variable="True"/>
             <parameter name="descriptions" type="String" array="True"/>
             <parameter name="codes" type="String" array="True"/>
             <parameter name="courseNames" type="String" array="True"/>
@@ -112,6 +109,7 @@
         <body>
             <declare name="i" type="Integer" array="False" size=""/>
             <declare name="rekomendasi" type="String" array="False" size=""/>
+            <assign variable="rekomendasi" expression="&quot;&quot;"/>
             <for variable="i" start="0" end="n - 1" direction="inc" step="1">
                 <output expression="&quot;Prioritas: &quot; &amp; ToFixed(priorities[i], 2)" newline="True"/>
                 <if expression="statuses[i] == &quot;Selesai&quot;">
@@ -131,7 +129,6 @@
                     </else>
                 </if>
             </for>
-            <output expression="descriptions[i] &amp; &quot;|&quot; &amp; codes[i] &amp; &quot;|&quot; &amp; courseNames[i] &amp; &quot;|&quot; &amp; lecturers[i] &amp; &quot;|&quot; &amp; deadlines[i] &amp; &quot;|&quot; &amp; subIDs[i] &amp; &quot;|&quot; &amp; statuses[i] &amp; &quot;|&quot; &amp; rekomendasi" newline="True"/>
         </body>
     </function>
     <function name="SortTasks" type="None" variable="">
