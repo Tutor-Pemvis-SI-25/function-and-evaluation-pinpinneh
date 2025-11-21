@@ -8,6 +8,7 @@ public class TLAST {
 
     public static void main(String[] args) {
         String[] descriptions = new String[10];
+        int hasil;
         String[] codes = new String[10];
         String[] courseNames = new String[10];
         String[] lecturers = new String[10];
@@ -17,179 +18,142 @@ public class TLAST {
         int[] days = new int[10];
         String[] statuses = new String[10];
         double[] priorities = new double[10];
-        int n = 0;
+        int n;
 
-        String command = "";
-        while (true) {
-            if (!input.hasNextLine())
-                break;
+        n = 0;
+        String command;
+
+        command = "";
+        while (!command.equals("---")) {
             command = input.nextLine();
-            if (command == null)
-                break;
-            command = command.trim();
             if (command.equals("---")) {
-                break;
-            }
-            if (command.equals("")) {
-                // skip empty lines
-                continue;
-            }
-
-            if (command.equals("Add task")) {
-                n = addTask(n, descriptions, codes, courseNames, lecturers, deadlines, subIDs, diffs, days, statuses,
-                        priorities);
-            } else if (command.equals("Update task status")) {
-                updateTask(n, codes, statuses);
-            } else if (command.equals("Show assigment") || command.equals("Show assignment")) {
-                showAssignment(n, descriptions, codes, courseNames, lecturers, deadlines, subIDs, statuses, priorities,
-                        diffs, days);
             } else {
-                // unknown command: ignore (or you can print a message)
+                if (command.equals("Add task")) {
+                    addTask(n, descriptions, codes, courseNames, lecturers, deadlines, subIDs, diffs, days, statuses,
+                            priorities);
+                } else {
+                    if (command.equals("Update task status")) {
+                        updateTask(n, codes, statuses);
+                    } else {
+                        if (command.equals("Show assigment") || command.equals("Show assignment")) {
+                            showAssignment(n, descriptions, codes, courseNames, lecturers, deadlines, subIDs, statuses,
+                                    priorities, diffs, days);
+                        }
+                    }
+                }
             }
         }
+        System.out.println(hasil(n, descriptions, codes, courseNames, lecturers, deadlines, subIDs, statuses,
+                priorities, diffs, days));
     }
 
-    // addTask returns new n (so caller knows n increased)
-    public static int addTask(int n, String[] descriptions, String[] codes, String[] courseNames, String[] lecturers,
+    public static void addTask(int n, String[] descriptions, String[] codes, String[] courseNames, String[] lecturers,
             String[] deadlines, String[] subIDs, int[] diffs, int[] days, String[] statuses, double[] priorities) {
         if (n < 10) {
-            // read fields in the exact order specified by the problem
             descriptions[n] = input.nextLine();
             codes[n] = input.nextLine();
             courseNames[n] = input.nextLine();
             lecturers[n] = input.nextLine();
             deadlines[n] = input.nextLine();
             subIDs[n] = input.nextLine();
-
-            // diffs and days are integers
-            String diffsStr = input.nextLine();
-            String daysStr = input.nextLine();
-            try {
-                diffs[n] = Integer.parseInt(diffsStr.trim());
-            } catch (Exception e) {
-                diffs[n] = 0;
-            }
-            try {
-                days[n] = Integer.parseInt(daysStr.trim());
-            } catch (Exception e) {
-                days[n] = 0;
-            }
-
+            diffs[n] = Integer.parseInt(input.nextLine());
+            days[n] = Integer.parseInt(input.nextLine());
             statuses[n] = input.nextLine();
-
             if (days[n] == 0) {
                 priorities[n] = diffs[n] * 1.0;
             } else {
                 priorities[n] = diffs[n] * 1.0 / days[n];
             }
-
             n = n + 1;
         }
-        return n;
     }
 
-    // showAssignment: sort by priorities desc, then print according to status
-    public static void showAssignment(int n, String[] descriptions, String[] codes, String[] courseNames,
+    public static String showAssignment(int n, String[] descriptions, String[] codes, String[] courseNames,
             String[] lecturers, String[] deadlines, String[] subIDs, String[] statuses, double[] priorities,
             int[] diffs, int[] days) {
-        if (n <= 0)
-            return;
+        int i, j;
+        String tempStr;
+        int rekomendasi;
+        double tempReal;
+        int tempInt;
 
-        // Bubble sort (descending by priority) — swap corresponding arrays
-        for (int a = 0; a < n - 1; a++) {
-            for (int b = 0; b < n - 1 - a; b++) {
-                if (priorities[b] < priorities[b + 1]) {
-                    // swap priorities
-                    double tmpD = priorities[b];
-                    priorities[b] = priorities[b + 1];
-                    priorities[b + 1] = tmpD;
-
-                    // swap strings
-                    String tmpS;
-                    tmpS = descriptions[b];
-                    descriptions[b] = descriptions[b + 1];
-                    descriptions[b + 1] = tmpS;
-                    tmpS = codes[b];
-                    codes[b] = codes[b + 1];
-                    codes[b + 1] = tmpS;
-                    tmpS = courseNames[b];
-                    courseNames[b] = courseNames[b + 1];
-                    courseNames[b + 1] = tmpS;
-                    tmpS = lecturers[b];
-                    lecturers[b] = lecturers[b + 1];
-                    lecturers[b + 1] = tmpS;
-                    tmpS = deadlines[b];
-                    deadlines[b] = deadlines[b + 1];
-                    deadlines[b + 1] = tmpS;
-                    tmpS = subIDs[b];
-                    subIDs[b] = subIDs[b + 1];
-                    subIDs[b + 1] = tmpS;
-                    tmpS = statuses[b];
-                    statuses[b] = statuses[b + 1];
-                    statuses[b + 1] = tmpS;
-
-                    // swap ints
-                    int tmpI;
-                    tmpI = diffs[b];
-                    diffs[b] = diffs[b + 1];
-                    diffs[b + 1] = tmpI;
-                    tmpI = days[b];
-                    days[b] = days[b + 1];
-                    days[b + 1] = tmpI;
+        rekomendasi = " ";
+        for (i = 0; i <= n - 1; i++) {
+            for (j = 0; j <= n - 2 - i; j++) {
+                if (priorities[j] < priorities[j + 1]) {
+                    tempReal = priorities[j];
+                    priorities[j] = priorities[j + 1];
+                    priorities[j + 1] = tempReal;
+                    tempStr = descriptions[j];
+                    descriptions[j] = descriptions[j + 1];
+                    descriptions[j + 1] = tempStr;
+                    tempStr = codes[j];
+                    codes[j] = codes[j + 1];
+                    codes[j + 1] = tempStr;
+                    tempStr = courseNames[j];
+                    courseNames[j] = courseNames[j + 1];
+                    courseNames[j + 1] = tempStr;
+                    tempStr = lecturers[j];
+                    lecturers[j] = lecturers[j + 1];
+                    lecturers[j + 1] = tempStr;
+                    tempStr = deadlines[j];
+                    deadlines[j] = deadlines[j + 1];
+                    deadlines[j + 1] = tempStr;
+                    tempStr = subIDs[j];
+                    subIDs[j] = subIDs[j + 1];
+                    subIDs[j + 1] = tempStr;
+                    tempStr = statuses[j];
+                    statuses[j] = statuses[j + 1];
+                    statuses[j + 1] = tempStr;
+                    tempInt = diffs[j];
+                    diffs[j] = diffs[j + 1];
+                    diffs[j + 1] = tempInt;
+                    tempInt = days[j];
+                    days[j] = days[j + 1];
+                    days[j + 1] = tempInt;
                 }
             }
         }
-
-        // Print according to format required
-        for (int i = 0; i < n; i++) {
-            System.out.printf("Prioritas: %.2f%n", priorities[i]);
-
-            if ("Selesai".equals(statuses[i])) {
-                // jika Selesai -> cetak tanpa deadline dan tanpa rekomendasi
-                System.out.println(
-                        descriptions[i] + "|" +
-                                codes[i] + "|" +
-                                courseNames[i] + "|" +
-                                lecturers[i] + "|" +
-                                subIDs[i] + "|" +
-                                "Selesai");
+        for (i = 0; i <= n - 1; i++) {
+            System.out.println("Prioritas: " + toFixed(priorities[i], 2));
+            if (statuses[i].equals("Selesai")) {
+                System.out.println(descriptions[i] + "|" + codes[i] + "|" + courseNames[i] + "|" + lecturers[i] + "|"
+                        + subIDs[i] + "|" + statuses[i]);
             } else {
-                // belum selesai -> cetak deadline + rekomendasi
-                String rekomendasi;
-                if (priorities[i] > 3.0) {
+                if (priorities[i] > 3) {
                     rekomendasi = "Penting! Anda harus mengerjakan tugas ini segera";
-                } else if (priorities[i] >= 1.5) {
-                    rekomendasi = "Tugas ini memiliki prioritas menengah";
                 } else {
-                    rekomendasi = "Tugas ini relatif ringan, namun jangan tunda terlalu lama";
+                    if (Status != "Selesai") {
+                        if (Prioritas > 3) {
+                            rekomendasi = "Penting!";
+                        }
+                    } else {
+                        rekomendasi = "Tugas ini relatif ringan, namun jangan tunda terlalu lama";
+                    }
                 }
-
-                System.out.println(
-                        descriptions[i] + "|" +
-                                codes[i] + "|" +
-                                courseNames[i] + "|" +
-                                lecturers[i] + "|" +
-                                deadlines[i] + "|" +
-                                subIDs[i] + "|" +
-                                statuses[i] + "|" +
-                                rekomendasi);
             }
         }
+        System.out.println(descriptions[i] + "|" + codes[i] + "|" + courseNames[i] + "|" + lecturers[i] + "|"
+                + deadlines[i] + "|" + subIDs[i] + "|" + statuses[i] + "|" + rekomendasi);
+
+        return hasil;
     }
 
-    // updateTask: change status for the given course code
     public static void updateTask(int n, String[] codes, String[] statuses) {
-        if (!input.hasNextLine())
-            return;
-        String searchCode = input.nextLine();
-        if (!input.hasNextLine())
-            return;
-        String newStatus = input.nextLine();
+        String searchCode;
+        String newStatus;
+        int i;
 
-        for (int i = 0; i < n; i++) {
-            if (codes[i] != null && codes[i].equals(searchCode)) {
+        searchCode = input.nextLine();
+        newStatus = input.nextLine();
+        for (i = 0; i <= n - 1; i++) {
+            if (codes[i].equals(searchCode)) {
                 statuses[i] = newStatus;
             }
         }
+    }
+
+    private static String toFixed(double value, int digits) {
+        return String.format("%." + digits + "f", value);
     }
 }
