@@ -70,7 +70,7 @@ public class TLAST {
 
     public static void showAssignment(int n, String[] descriptions, String[] codes, String[] courseNames,
             String[] lecturers, String[] deadlines, String[] subIDs, String[] statuses, double[] priorities,
-            int[] diffs, int[] days, String[] kets) {
+            int[] diffs, int[] days) {
         int i, j;
         String tempStr;
         String rekomendasi;
