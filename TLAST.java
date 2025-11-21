@@ -8,7 +8,6 @@ public class TLAST {
 
     public static void main(String[] args) {
         String[] descriptions = new String[10];
-        int hasil;
         String[] codes = new String[10];
         String[] courseNames = new String[10];
         String[] lecturers = new String[10];
@@ -36,15 +35,15 @@ public class TLAST {
                         updateTask(n, codes, statuses);
                     } else {
                         if (command.equals("Show assigment") || command.equals("Show assignment")) {
+                            sortTasks(n, priorities, descriptions, codes, courseNames, lecturers, deadlines, subIDs,
+                                    statuses, diffs, days);
                             showAssignment(n, descriptions, codes, courseNames, lecturers, deadlines, subIDs, statuses,
-                                    priorities, diffs, days);
+                                    priorities);
                         }
                     }
                 }
             }
         }
-        System.out.println(hasil(n, descriptions, codes, courseNames, lecturers, deadlines, subIDs, statuses,
-                priorities, diffs, days));
     }
 
     public static void addTask(int n, String[] descriptions, String[] codes, String[] courseNames, String[] lecturers,
@@ -68,16 +67,36 @@ public class TLAST {
         }
     }
 
-    public static String showAssignment(int n, String[] descriptions, String[] codes, String[] courseNames,
-            String[] lecturers, String[] deadlines, String[] subIDs, String[] statuses, double[] priorities,
+    public static void showAssignment(int n, String[] descriptions, String[] codes, String[] courseNames,
+            String[] lecturers, String[] deadlines, String[] subIDs, String[] statuses, double[] priorities) {
+        int i;
+        String rekomendasi;
+
+        for (i = 0; i <= n - 1; i++) {
+            System.out.println("Prioritas: " + toFixed(priorities[i], 2));
+            if (statuses[i].equals("Selesai")) {
+                System.out.println(descriptions[i] + "|" + codes[i] + "|" + courseNames[i] + "|" + lecturers[i] + "|"
+                        + subIDs[i] + "|" + statuses[i]);
+            } else {
+                if (priorities[i] > 3) {
+                    rekomendasi = "Penting! Anda harus mengerjakan tugas ini segera";
+                } else {
+                    rekomendasi = "Tugas ini relatif ringan, namun jangan tunda terlalu lama";
+                }
+                System.out.println(descriptions[i] + "|" + codes[i] + "|" + courseNames[i] + "|" + lecturers[i] + "|"
+                        + deadlines[i] + "|" + subIDs[i] + "|" + statuses[i] + "|" + rekomendasi);
+            }
+        }
+    }
+
+    public static void sortTasks(int n, double[] priorities, String[] descriptions, String[] codes,
+            String[] courseNames, String[] lecturers, String[] deadlines, String[] subIDs, String[] statuses,
             int[] diffs, int[] days) {
         int i, j;
         String tempStr;
-        int rekomendasi;
         double tempReal;
         int tempInt;
 
-        rekomendasi = " ";
         for (i = 0; i <= n - 1; i++) {
             for (j = 0; j <= n - 2 - i; j++) {
                 if (priorities[j] < priorities[j + 1]) {
@@ -114,29 +133,6 @@ public class TLAST {
                 }
             }
         }
-        for (i = 0; i <= n - 1; i++) {
-            System.out.println("Prioritas: " + toFixed(priorities[i], 2));
-            if (statuses[i].equals("Selesai")) {
-                System.out.println(descriptions[i] + "|" + codes[i] + "|" + courseNames[i] + "|" + lecturers[i] + "|"
-                        + subIDs[i] + "|" + statuses[i]);
-            } else {
-                if (priorities[i] > 3) {
-                    rekomendasi = "Penting! Anda harus mengerjakan tugas ini segera";
-                } else {
-                    if (Status != "Selesai") {
-                        if (Prioritas > 3) {
-                            rekomendasi = "Penting!";
-                        }
-                    } else {
-                        rekomendasi = "Tugas ini relatif ringan, namun jangan tunda terlalu lama";
-                    }
-                }
-            }
-        }
-        System.out.println(descriptions[i] + "|" + codes[i] + "|" + courseNames[i] + "|" + lecturers[i] + "|"
-                + deadlines[i] + "|" + subIDs[i] + "|" + statuses[i] + "|" + rekomendasi);
-
-        return hasil;
     }
 
     public static void updateTask(int n, String[] codes, String[] statuses) {
