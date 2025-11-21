@@ -1,18 +1,14 @@
 <?xml version="1.0"?>
 <flowgorithm fileversion="4.2">
     <attributes>
-        <attribute name="name" value="TLAST"/>
+        <attribute name="name" value="Task Management System Fixed"/>
         <attribute name="authors" value="UcokButet"/>
-        <attribute name="about" value="Task Management Fixed Output"/>
-        <attribute name="saved" value="2025-11-21 08:16:54 AM"/>
-        <attribute name="created" value="SmVyZW1pO0pFUkVNSTsyMDI1LTExLTIwOzAyOjM0OjMxIFBNOzIzMTg="/>
-        <attribute name="edited" value="SmVyZW1pO0pFUkVNSTsyMDI1LTExLTIxOzA4OjE2OjU0IEFNOzI7MjQyNA=="/>
+        <attribute name="about" value="Fixed Logic for Show and Main"/>
     </attributes>
     <function name="Main" type="None" variable="">
         <parameters/>
         <body>
             <declare name="descriptions" type="String" array="True" size="10"/>
-            <declare name="hasil" type="Integer" array="False" size=""/>
             <declare name="codes" type="String" array="True" size="10"/>
             <declare name="courseNames" type="String" array="True" size="10"/>
             <declare name="lecturers" type="String" array="True" size="10"/>
@@ -43,7 +39,7 @@
                                     <else>
                                         <if expression="command == &quot;Show assigment&quot; || command == &quot;Show assignment&quot;">
                                             <then>
-                                                <call expression="ShowAssignment(n, descriptions, codes, courseNames, lecturers, deadlines, subIDs, statuses, priorities, diffs, days)"/>
+                                                <call expression="ShowAssignment(n, descriptions, codes, courseNames, lecturers, deadlines, subIDs, statuses, priorities, diffs, days, kets)"/>
                                             </then>
                                             <else/>
                                         </if>
@@ -54,7 +50,6 @@
                     </else>
                 </if>
             </while>
-            <output expression="hasil (n, descriptions, codes, courseNames, lecturers, deadlines, subIDs, statuses, priorities, diffs, days)" newline="True"/>
         </body>
     </function>
     <function name="AddTask" type="None" variable="">
@@ -97,7 +92,7 @@
             </if>
         </body>
     </function>
-    <function name="ShowAssignment" type="String" variable="hasil">
+    <function name="ShowAssignment" type="None" variable="">
         <parameters>
             <parameter name="n" type="Integer" array="False"/>
             <parameter name="descriptions" type="String" array="True"/>
@@ -110,13 +105,15 @@
             <parameter name="priorities" type="Real" array="True"/>
             <parameter name="diffs" type="Integer" array="True"/>
             <parameter name="days" type="Integer" array="True"/>
+            <parameter name="kets" type="String" array="True"/>
         </parameters>
         <body>
             <declare name="i, j" type="Integer" array="False" size=""/>
             <declare name="tempStr" type="String" array="False" size=""/>
-            <declare name="rekomendasi" type="Integer" array="False" size=""/>
+            <declare name="rekomendasi" type="String" array="False" size=""/>
             <declare name="tempReal" type="Real" array="False" size=""/>
             <declare name="tempInt" type="Integer" array="False" size=""/>
+            
             <for variable="i" start="0" end="n - 1" direction="inc" step="1">
                 <for variable="j" start="0" end="n - 2 - i" direction="inc" step="1">
                     <if expression="priorities[j] &lt; priorities[j+1]">
@@ -156,9 +153,10 @@
                     </if>
                 </for>
             </for>
-            <declare name="rekomendasi" type="String" array="False" size=""/>
+            
             <for variable="i" start="0" end="n - 1" direction="inc" step="1">
                 <output expression="&quot;Prioritas: &quot; &amp; ToFixed(priorities[i], 2)" newline="True"/>
+                
                 <if expression="statuses[i] == &quot;Selesai&quot;">
                     <then>
                         <output expression="descriptions[i] &amp; &quot;|&quot; &amp; codes[i] &amp; &quot;|&quot; &amp; courseNames[i] &amp; &quot;|&quot; &amp; lecturers[i] &amp; &quot;|&quot; &amp; subIDs[i] &amp; &quot;|&quot; &amp; statuses[i]" newline="True"/>
@@ -179,10 +177,10 @@
                                 </if>
                             </else>
                         </if>
+                        <output expression="descriptions[i] &amp; &quot;|&quot; &amp; codes[i] &amp; &quot;|&quot; &amp; courseNames[i] &amp; &quot;|&quot; &amp; lecturers[i] &amp; &quot;|&quot; &amp; deadlines[i] &amp; &quot;|&quot; &amp; subIDs[i] &amp; &quot;|&quot; &amp; statuses[i] &amp; &quot;|&quot; &amp; rekomendasi" newline="True"/>
                     </else>
                 </if>
             </for>
-            <output expression="descriptions[i] &amp; &quot;|&quot; &amp; codes[i] &amp; &quot;|&quot; &amp; courseNames[i] &amp; &quot;|&quot; &amp; lecturers[i] &amp; &quot;|&quot; &amp; deadlines[i] &amp; &quot;|&quot; &amp; subIDs[i] &amp; &quot;|&quot; &amp; statuses[i] &amp; &quot;|&quot; &amp; rekomendasi" newline="True"/>
         </body>
     </function>
     <function name="UpdateTask" type="None" variable="">
