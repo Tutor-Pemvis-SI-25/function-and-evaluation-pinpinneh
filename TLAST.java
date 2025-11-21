@@ -128,8 +128,14 @@ public class TLAST {
                         rekomendasi = "Tugas ini relatif ringan, namun jangan tunda terlalu lama";
                     }
                 }
-                System.out.println(descriptions[i] + "|" + codes[i] + "|" + courseNames[i] + "|" + lecturers[i] + "|"
-                        + deadlines[i] + "|" + subIDs[i] + "|" + statuses[i] + "|" + rekomendasi);
+                System.out.println(
+                        descriptions[i] + "|" +
+                                codes[i] + "|" +
+                                courseNames[i] + "|" +
+                                lecturers[i] + "|" +
+                                subIDs[i] + "|" +
+                                statuses[i]);
+
             }
         }
     }
