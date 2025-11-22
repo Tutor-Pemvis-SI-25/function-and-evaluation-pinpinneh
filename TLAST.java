@@ -82,19 +82,17 @@ public class TLAST {
                 rekomendasi = "";
                 System.out.println("Prioritas: " + toFixed(priorities[i], 2));
                 if (statuses[i].equals("Selesai")) {
-                    System.out.println(descriptions[i] + " | " + codes[i] + " | " + courseNames[i] + " | "
-                            + lecturers[i] + " | " + subIDs[i] + " | " + statuses[i]);
+                    System.out.println(descriptions[i] + "|" + codes[i] + "|" + courseNames[i] + "|" + lecturers[i]
+                            + "|" + subIDs[i] + "|" + statuses[i]);
                 } else {
                     if (priorities[i] > 3) {
                         rekomendasi = "Penting! Anda harus mengerjakan tugas ini segera";
                     } else {
                         rekomendasi = "Tugas ini relatif ringan, namun jangan tunda terlalu lama";
                     }
-                    System.out.println(
-                            descriptions[i] + " | " + codes[i] + " | " + courseNames[i] + " | " + lecturers[i] + " | "
-                                    + deadlines[i] + " | " + subIDs[i] + " | " + statuses[i] + " | " + rekomendasi);
+                    System.out.println(descriptions[i] + "|" + codes[i] + "|" + courseNames[i] + "|" + lecturers[i]
+                            + "|" + deadlines[i] + "|" + subIDs[i] + "|" + statuses[i] + "|" + rekomendasi);
                 }
-                System.out.println("----------------------------------------");
             }
         }
     }
@@ -158,11 +156,10 @@ public class TLAST {
             if (codes[i].equals(searchCode)) {
                 statuses[i] = newStatus;
                 found = true;
-                System.out.println("Status tugas berhasil diupdate!");
             }
         }
         if (!found) {
-            System.out.println("Kode tugas tidak ditemukan!");
+            System.out.println("Kode tugas tidak ditemukan");
         }
     }
 
