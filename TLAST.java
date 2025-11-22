@@ -1,4 +1,5 @@
-//Ervinna Christine Debora - 12S25059
+// 12S25035-Sintia Geni Audi Nainggolan
+// 12S25059- Ervinna Christine Debora
 
 import java.util.*;
 import java.lang.Math;
@@ -28,14 +29,17 @@ public class TLAST {
             if (command.equals("---")) {
             } else {
                 if (command.equals("Add task")) {
-                    addTask(n, descriptions, codes, courseNames, lecturers, deadlines, subIDs, diffs, days, statuses, priorities);
+                    addTask(n, descriptions, codes, courseNames, lecturers, deadlines, subIDs, diffs, days, statuses,
+                            priorities);
                 } else {
                     if (command.equals("Update task status")) {
                         updateTask(n, codes, statuses);
                     } else {
                         if (command.equals("Show assigment") || command.equals("Show assignment")) {
-                            sortTasks(n, priorities, descriptions, codes, courseNames, lecturers, deadlines, subIDs, statuses, diffs, days);
-                            showAssignment(n, descriptions, codes, courseNames, lecturers, deadlines, subIDs, statuses, priorities);
+                            sortTasks(n, priorities, descriptions, codes, courseNames, lecturers, deadlines, subIDs,
+                                    statuses, diffs, days);
+                            showAssignment(n, descriptions, codes, courseNames, lecturers, deadlines, subIDs, statuses,
+                                    priorities);
                         }
                     }
                 }
@@ -44,8 +48,9 @@ public class TLAST {
         sortTasks(n, priorities, descriptions, codes, courseNames, lecturers, deadlines, subIDs, statuses, diffs, days);
         showAssignment(n, descriptions, codes, courseNames, lecturers, deadlines, subIDs, statuses, priorities);
     }
-    
-    public static void addTask(int n, String[] descriptions, String[] codes, String[] courseNames, String[] lecturers, String[] deadlines, String[] subIDs, int[] diffs, int[] days, String[] statuses, double[] priorities) {
+
+    public static void addTask(int n, String[] descriptions, String[] codes, String[] courseNames, String[] lecturers,
+            String[] deadlines, String[] subIDs, int[] diffs, int[] days, String[] statuses, double[] priorities) {
         if (n < 10) {
             descriptions[n] = input.nextLine();
             codes[n] = input.nextLine();
@@ -64,30 +69,39 @@ public class TLAST {
             n = n + 1;
         }
     }
-    
-    public static void showAssignment(int n, String[] descriptions, String[] codes, String[] courseNames, String[] lecturers, String[] deadlines, String[] subIDs, String[] statuses, double[] priorities) {
+
+    public static void showAssignment(int n, String[] descriptions, String[] codes, String[] courseNames,
+            String[] lecturers, String[] deadlines, String[] subIDs, String[] statuses, double[] priorities) {
         int i;
         String rekomendasi;
 
-        rekomendasi = "";
-        for (i = 0; i <= n - 1; i++) {
-            System.out.println("Prioritas: " + toFixed(priorities[i],2));
-            if (statuses[i].equals("Selesai")) {
-                System.out.println(descriptions[i] + "|" + codes[i] + "|" + courseNames[i] + "|" + lecturers[i] + "|" + subIDs[i] + "|" + statuses[i]);
-            } else {
-                if (priorities[i] > 3) {
-                    rekomendasi = "Penting! Anda harus mengerjakan tugas ini segera";
+        if (n == 0) {
+            System.out.println("Tidak ada tugas yang tersedia.");
+        } else {
+            for (i = 0; i <= n - 1; i++) {
+                rekomendasi = "";
+                System.out.println("Prioritas: " + toFixed(priorities[i], 2));
+                if (statuses[i].equals("Selesai")) {
+                    System.out.println(descriptions[i] + " | " + codes[i] + " | " + courseNames[i] + " | "
+                            + lecturers[i] + " | " + subIDs[i] + " | " + statuses[i]);
                 } else {
-                    rekomendasi = "Tugas ini relatif ringan, namun jangan tunda terlalu lama";
+                    if (priorities[i] > 3) {
+                        rekomendasi = "Penting! Anda harus mengerjakan tugas ini segera";
+                    } else {
+                        rekomendasi = "Tugas ini relatif ringan, namun jangan tunda terlalu lama";
+                    }
+                    System.out.println(
+                            descriptions[i] + " | " + codes[i] + " | " + courseNames[i] + " | " + lecturers[i] + " | "
+                                    + deadlines[i] + " | " + subIDs[i] + " | " + statuses[i] + " | " + rekomendasi);
                 }
-                System.out.println(descriptions[i] + "|" + codes[i] + "|" + courseNames[i] + "|" + lecturers[i] + "|" + deadlines[i] + "|" + subIDs[i] + "|" + statuses[i] + "|" + rekomendasi);
+                System.out.println("----------------------------------------");
             }
         }
-        System.out.println(descriptions[i] + "|" + codes[i] + "|" + courseNames[i] + "|" + lecturers[i] + "|" + deadlines[i] + "|" + subIDs[i] + "|" + statuses[i] + "|" + rekomendasi);
-        System.out.println(descriptions[i] + "|" + codes[i] + "|" + courseNames[i] + "|" + lecturers[i] + "|" + subIDs[i] + "|" + statuses[i]);
     }
-    
-    public static void sortTasks(int n, double[] priorities, String[] descriptions, String[] codes, String[] courseNames, String[] lecturers, String[] deadlines, String[] subIDs, String[] statuses, int[] diffs, int[] days) {
+
+    public static void sortTasks(int n, double[] priorities, String[] descriptions, String[] codes,
+            String[] courseNames, String[] lecturers, String[] deadlines, String[] subIDs, String[] statuses,
+            int[] diffs, int[] days) {
         int i, j;
         String tempStr;
         double tempReal;
@@ -130,21 +144,28 @@ public class TLAST {
             }
         }
     }
-    
+
     public static void updateTask(int n, String[] codes, String[] statuses) {
         String searchCode;
         String newStatus;
         int i;
+        boolean found;
 
+        found = false;
         searchCode = input.nextLine();
         newStatus = input.nextLine();
         for (i = 0; i <= n - 1; i++) {
             if (codes[i].equals(searchCode)) {
                 statuses[i] = newStatus;
+                found = true;
+                System.out.println("Status tugas berhasil diupdate!");
             }
         }
+        if (!found) {
+            System.out.println("Kode tugas tidak ditemukan!");
+        }
     }
-    
+
     private static String toFixed(double value, int digits) {
         return String.format("%." + digits + "f", value);
     }
