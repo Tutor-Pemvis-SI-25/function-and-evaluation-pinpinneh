@@ -1,10 +1,12 @@
 <?xml version="1.0"?>
 <flowgorithm fileversion="4.2">
     <attributes>
-        <attribute name="name" value="TLAST_FINAL_V2"/>
+        <attribute name="name" value="TLAST_FINAL_V2_FIXED"/>
         <attribute name="authors" value="UcokButet"/>
-        <attribute name="about" value="Task Management System - Fixed Init Error"/>
-        <attribute name="saved" value="2025-11-21 09:55:00 PM"/>
+        <attribute name="about" value="Task Management System - Fixed Output Issues"/>
+        <attribute name="saved" value="2025-11-21 09:48:10 PM"/>
+        <attribute name="created" value="SmVyZW1pO0pFUkVNSTsyMDI1LTExLTIxOzA5OjQxOjM1IFBNOzIzMjg="/>
+        <attribute name="edited" value="SmVyZW1pO0pFUkVNSTsyMDI1LTExLTIxOzA5OjQ4OjEwIFBNOzE7MjQzNg=="/>
     </attributes>
     <function name="Main" type="None" variable="">
         <parameters/>
@@ -52,11 +54,13 @@
                     </else>
                 </if>
             </while>
+            <call expression="SortTasks(n, priorities, descriptions, codes, courseNames, lecturers, deadlines, subIDs, statuses, diffs, days)"/>
+            <call expression="ShowAssignment(n, descriptions, codes, courseNames, lecturers, deadlines, subIDs, statuses, priorities)"/>
         </body>
     </function>
     <function name="AddTask" type="None" variable="">
         <parameters>
-            <parameter name="n" type="Integer" array="False" variable="True"/>
+            <parameter name="n" type="Integer" array="False"/>
             <parameter name="descriptions" type="String" array="True"/>
             <parameter name="codes" type="String" array="True"/>
             <parameter name="courseNames" type="String" array="True"/>
@@ -109,26 +113,36 @@
         <body>
             <declare name="i" type="Integer" array="False" size=""/>
             <declare name="rekomendasi" type="String" array="False" size=""/>
-            <assign variable="rekomendasi" expression="&quot;&quot;"/>
-            <for variable="i" start="0" end="n - 1" direction="inc" step="1">
-                <output expression="&quot;Prioritas: &quot; &amp; ToFixed(priorities[i], 2)" newline="True"/>
-                <if expression="statuses[i] == &quot;Selesai&quot;">
-                    <then>
-                        <output expression="descriptions[i] &amp; &quot;|&quot; &amp; codes[i] &amp; &quot;|&quot; &amp; courseNames[i] &amp; &quot;|&quot; &amp; lecturers[i] &amp; &quot;|&quot; &amp; subIDs[i] &amp; &quot;|&quot; &amp; statuses[i]" newline="True"/>
-                    </then>
-                    <else>
-                        <if expression="priorities[i] &gt; 3">
+            
+            <if expression="n == 0">
+                <then>
+                    <output expression="&quot;Tidak ada tugas yang tersedia.&quot;" newline="True"/>
+                </then>
+                <else>
+                    <for variable="i" start="0" end="n - 1" direction="inc" step="1">
+                        <assign variable="rekomendasi" expression="&quot;&quot;"/>
+                        <output expression="&quot;Prioritas: &quot; &amp; ToFixed(priorities[i], 2)" newline="True"/>
+                        
+                        <if expression="statuses[i] == &quot;Selesai&quot;">
                             <then>
-                                <assign variable="rekomendasi" expression="&quot;Penting! Anda harus mengerjakan tugas ini segera&quot;"/>
+                                <output expression="descriptions[i] &amp; &quot; | &quot; &amp; codes[i] &amp; &quot; | &quot; &amp; courseNames[i] &amp; &quot; | &quot; &amp; lecturers[i] &amp; &quot; | &quot; &amp; subIDs[i] &amp; &quot; | &quot; &amp; statuses[i]" newline="True"/>
                             </then>
                             <else>
-                                <assign variable="rekomendasi" expression="&quot;Tugas ini relatif ringan, namun jangan tunda terlalu lama&quot;"/>
+                                <if expression="priorities[i] &gt; 3">
+                                    <then>
+                                        <assign variable="rekomendasi" expression="&quot;Penting! Anda harus mengerjakan tugas ini segera&quot;"/>
+                                    </then>
+                                    <else>
+                                        <assign variable="rekomendasi" expression="&quot;Tugas ini relatif ringan, namun jangan tunda terlalu lama&quot;"/>
+                                    </else>
+                                </if>
+                                <output expression="descriptions[i] &amp; &quot; | &quot; &amp; codes[i] &amp; &quot; | &quot; &amp; courseNames[i] &amp; &quot; | &quot; &amp; lecturers[i] &amp; &quot; | &quot; &amp; deadlines[i] &amp; &quot; | &quot; &amp; subIDs[i] &amp; &quot; | &quot; &amp; statuses[i] &amp; &quot; | &quot; &amp; rekomendasi" newline="True"/>
                             </else>
                         </if>
-                        <output expression="descriptions[i] &amp; &quot;|&quot; &amp; codes[i] &amp; &quot;|&quot; &amp; courseNames[i] &amp; &quot;|&quot; &amp; lecturers[i] &amp; &quot;|&quot; &amp; deadlines[i] &amp; &quot;|&quot; &amp; subIDs[i] &amp; &quot;|&quot; &amp; statuses[i] &amp; &quot;|&quot; &amp; rekomendasi" newline="True"/>
-                    </else>
-                </if>
-            </for>
+                        <output expression="&quot;----------------------------------------&quot;" newline="True"/>
+                    </for>
+                </else>
+            </if>
         </body>
     </function>
     <function name="SortTasks" type="None" variable="">
@@ -201,16 +215,26 @@
             <declare name="searchCode" type="String" array="False" size=""/>
             <declare name="newStatus" type="String" array="False" size=""/>
             <declare name="i" type="Integer" array="False" size=""/>
+            <declare name="found" type="Boolean" array="False" size=""/>
+            <assign variable="found" expression="False"/>
             <input variable="searchCode"/>
             <input variable="newStatus"/>
             <for variable="i" start="0" end="n - 1" direction="inc" step="1">
                 <if expression="codes[i] == searchCode">
                     <then>
                         <assign variable="statuses[i]" expression="newStatus"/>
+                        <assign variable="found" expression="True"/>
+                        <output expression="&quot;Status tugas berhasil diupdate!&quot;" newline="True"/>
                     </then>
                     <else/>
                 </if>
             </for>
+            <if expression="!found">
+                <then>
+                    <output expression="&quot;Kode tugas tidak ditemukan!&quot;" newline="True"/>
+                </then>
+                <else/>
+            </if>
         </body>
     </function>
 </flowgorithm>
