@@ -24,9 +24,11 @@ public class TLAST {
         String command;
 
         command = "";
-        while (!command.equals("---")) {
+        while (!command.equals("---") && n < 10) {
             command = input.nextLine();
             if (command.equals("---")) {
+
+                // Unsupported shape: break
             } else {
                 if (command.equals("Add task")) {
                     addTask(n, descriptions, codes, courseNames, lecturers, deadlines, subIDs, diffs, days, statuses,
@@ -45,28 +47,31 @@ public class TLAST {
                 }
             }
         }
-        sortTasks(n, priorities, descriptions, codes, courseNames, lecturers, deadlines, subIDs, statuses, diffs, days);
-        showAssignment(n, descriptions, codes, courseNames, lecturers, deadlines, subIDs, statuses, priorities);
     }
 
     public static void addTask(int n, String[] descriptions, String[] codes, String[] courseNames, String[] lecturers,
             String[] deadlines, String[] subIDs, int[] diffs, int[] days, String[] statuses, double[] priorities) {
         if (n < 10) {
             descriptions[n] = input.nextLine();
-            codes[n] = input.nextLine();
-            courseNames[n] = input.nextLine();
-            lecturers[n] = input.nextLine();
-            deadlines[n] = input.nextLine();
-            subIDs[n] = input.nextLine();
-            diffs[n] = Integer.parseInt(input.nextLine());
-            days[n] = Integer.parseInt(input.nextLine());
-            statuses[n] = input.nextLine();
-            if (days[n] == 0) {
-                priorities[n] = diffs[n] * 1.0;
+            if (descriptions[n].equals("---")) {
+
+                // Unsupported shape: break
             } else {
-                priorities[n] = diffs[n] * 1.0 / days[n];
+                codes[n] = input.nextLine();
+                courseNames[n] = input.nextLine();
+                lecturers[n] = input.nextLine();
+                deadlines[n] = input.nextLine();
+                subIDs[n] = input.nextLine();
+                diffs[n] = Integer.parseInt(input.nextLine());
+                days[n] = Integer.parseInt(input.nextLine());
+                statuses[n] = input.nextLine();
+                if (days[n] == 0) {
+                    priorities[n] = diffs[n] * 1.0;
+                } else {
+                    priorities[n] = diffs[n] * 1.0 / days[n];
+                }
+                n = n + 1;
             }
-            n = n + 1;
         }
     }
 
@@ -80,16 +85,22 @@ public class TLAST {
         } else {
             for (i = 0; i <= n - 1; i++) {
                 rekomendasi = "";
+                if (!statuses[i].equals("Selesai")) {
+                    if (priorities[i] > 3) {
+                        rekomendasi = "Penting! Anda harus mengerjakan tugas ini segera";
+                    } else {
+                        if (priorities[i] >= 1.5 && priorities[i] <= 3) {
+                            rekomendasi = "Tugas ini memiliki prioritas menengah";
+                        } else {
+                            rekomendasi = "Tugas ini relatif ringan, namun jangan tunda terlalu lama";
+                        }
+                    }
+                }
                 System.out.println("Prioritas: " + toFixed(priorities[i], 2));
                 if (statuses[i].equals("Selesai")) {
                     System.out.println(descriptions[i] + "|" + codes[i] + "|" + courseNames[i] + "|" + lecturers[i]
                             + "|" + subIDs[i] + "|" + statuses[i]);
                 } else {
-                    if (priorities[i] > 3) {
-                        rekomendasi = "Penting! Anda harus mengerjakan tugas ini segera";
-                    } else {
-                        rekomendasi = "Tugas ini relatif ringan, namun jangan tunda terlalu lama";
-                    }
                     System.out.println(descriptions[i] + "|" + codes[i] + "|" + courseNames[i] + "|" + lecturers[i]
                             + "|" + deadlines[i] + "|" + subIDs[i] + "|" + statuses[i] + "|" + rekomendasi);
                 }
@@ -100,7 +111,8 @@ public class TLAST {
     public static void sortTasks(int n, double[] priorities, String[] descriptions, String[] codes,
             String[] courseNames, String[] lecturers, String[] deadlines, String[] subIDs, String[] statuses,
             int[] diffs, int[] days) {
-        int i, j;
+        int i;
+        int j;
         String tempStr;
         double tempReal;
         int tempInt;
