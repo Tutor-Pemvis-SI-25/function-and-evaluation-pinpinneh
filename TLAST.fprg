@@ -214,20 +214,20 @@
             <declare name="searchCode" type="String" array="False" size=""/>
             <declare name="newStatus" type="String" array="False" size=""/>
             <declare name="i" type="Integer" array="False" size=""/>
-            <declare name="found" type="Boolean" array="False" size=""/>
-            <assign variable="found" expression="False"/>
+            <declare name="found" type="Integer" array="False" size=""/>
+            <assign variable="found" expression="0"/>
             <input variable="searchCode"/>
             <input variable="newStatus"/>
             <for variable="i" start="0" end="n - 1" direction="inc" step="1">
                 <if expression="codes[i] == searchCode">
                     <then>
                         <assign variable="statuses[i]" expression="newStatus"/>
-                        <assign variable="found" expression="True"/>
+                        <assign variable="found" expression="1"/>
                     </then>
                     <else/>
                 </if>
             </for>
-            <if expression="!found">
+            <if expression="found == 0">
                 <then>
                     <output expression="&quot;Kode tugas tidak ditemukan&quot;" newline="True"/>
                 </then>

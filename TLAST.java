@@ -147,18 +147,18 @@ public class TLAST {
         String searchCode;
         String newStatus;
         int i;
-        boolean found;
+        int found;
 
-        found = false;
+        found = 0;
         searchCode = input.nextLine();
         newStatus = input.nextLine();
         for (i = 0; i <= n - 1; i++) {
             if (codes[i].equals(searchCode)) {
                 statuses[i] = newStatus;
-                found = true;
+                found = 1;
             }
         }
-        if (!found) {
+        if (found == 0) {
             System.out.println("Kode tugas tidak ditemukan");
         }
     }
