@@ -4,13 +4,11 @@
 import java.util.*;
 import java.lang.Math;
 
-public class TLAST {
+public class TLA {
     private static Scanner input = new Scanner(System.in);
 
     public static void main(String[] args) {
-        String[] descriptions = new String[10], codes = new String[10], courseNames = new String[10],
-                lecturers = new String[10], deadlines = new String[10], subIDs = new String[10],
-                statuses = new String[10];
+        String[] descriptions = new String[10], codes = new String[10], courseNames = new String[10], lecturers = new String[10], deadlines = new String[10], subIDs = new String[10], statuses = new String[10];
         int[] diffs = new int[10];
         int[] days = new int[10];
         double[] priorities = new double[10];
@@ -19,13 +17,11 @@ public class TLAST {
         int i, n;
 
         n = 0;
-        initialize(descriptions, codes, courseNames, lecturers, deadlines, subIDs, diffs, days, statuses, priorities,
-                recommendations);
+        initialize(descriptions, codes, courseNames, lecturers, deadlines, subIDs, diffs, days, statuses, priorities, recommendations);
         for (i = 0; i <= 9; i++) {
             command = input.nextLine();
             if (command.equals("Add task")) {
-                n = addTask(descriptions, codes, courseNames, lecturers, deadlines, subIDs, diffs, days, statuses,
-                        priorities, recommendations, i, n);
+                n = addTask(descriptions, codes, courseNames, lecturers, deadlines, subIDs, diffs, days, statuses, priorities, recommendations, i, n);
             } else {
                 if (command.equals("Update task status")) {
                     updateStatus(codes, statuses, n);
@@ -41,15 +37,11 @@ public class TLAST {
                 }
             }
         }
-        sortTasks(descriptions, codes, courseNames, lecturers, deadlines, subIDs, diffs, days, statuses, priorities,
-                recommendations, n);
-        showAssignment(descriptions, codes, courseNames, lecturers, deadlines, subIDs, statuses, priorities,
-                recommendations, n);
+        sortTasks(descriptions, codes, courseNames, lecturers, deadlines, subIDs, diffs, days, statuses, priorities, recommendations, n);
+        showAssignment(descriptions, codes, courseNames, lecturers, deadlines, subIDs, statuses, priorities, recommendations, n);
     }
-
-    public static int addTask(String[] descriptions, String[] codes, String[] courseNames, String[] lecturers,
-            String[] deadlines, String[] subIDs, int[] diffs, int[] days, String[] statuses, double[] priorities,
-            String[] recommendations, int i, int n) {
+    
+    public static int addTask(String[] descriptions, String[] codes, String[] courseNames, String[] lecturers, String[] deadlines, String[] subIDs, int[] diffs, int[] days, String[] statuses, double[] priorities, String[] recommendations, int i, int n) {
         descriptions[i] = input.nextLine();
         codes[i] = input.nextLine();
         courseNames[i] = input.nextLine();
@@ -78,13 +70,11 @@ public class TLAST {
             }
         }
         n = n + 1;
-
+        
         return n;
     }
-
-    public static void initialize(String[] descriptions, String[] codes, String[] courseNames, String[] lecturers,
-            String[] deadlines, String[] subIDs, int[] diffs, int[] days, String[] statuses, double[] priorities,
-            String[] recommendations) {
+    
+    public static void initialize(String[] descriptions, String[] codes, String[] courseNames, String[] lecturers, String[] deadlines, String[] subIDs, int[] diffs, int[] days, String[] statuses, double[] priorities, String[] recommendations) {
         int a;
 
         for (a = 0; a <= 9; a++) {
@@ -101,30 +91,24 @@ public class TLAST {
             recommendations[a] = "";
         }
     }
-
-    public static void showAssignment(String[] descriptions, String[] codes, String[] courseNames, String[] lecturers,
-            String[] deadlines, String[] subIDs, String[] statuses, double[] priorities, String[] recommendations,
-            int n) {
+    
+    public static void showAssignment(String[] descriptions, String[] codes, String[] courseNames, String[] lecturers, String[] deadlines, String[] subIDs, String[] statuses, double[] priorities, String[] recommendations, int n) {
         int i;
 
         for (i = 0; i <= n - 1; i++) {
             if (statuses[i].equals("Selesai")) {
-                System.out.println("Prioritas: " + toFixed(priorities[i], 2));
-                System.out.println(descriptions[i] + "|" + codes[i] + "|" + courseNames[i] + "|" + lecturers[i] + "|"
-                        + subIDs[i] + "|" + statuses[i]);
+                System.out.println("Prioritas: " + toFixed(priorities[i],2));
+                System.out.println(descriptions[i] + "|" + codes[i] + "|" + courseNames[i] + "|" + lecturers[i] + "|" + subIDs[i] + "|" + statuses[i]);
             } else {
                 if (statuses[i].equals("Belum Selesai")) {
-                    System.out.println("Prioritas: " + toFixed(priorities[i], 2));
-                    System.out.println(descriptions[i] + "|" + codes[i] + "|" + courseNames[i] + "|" + lecturers[i]
-                            + "|" + deadlines[i] + "|" + subIDs[i] + "|" + statuses[i] + "|" + recommendations[i]);
+                    System.out.println("Prioritas: " + toFixed(priorities[i],2));
+                    System.out.println(descriptions[i] + "|" + codes[i] + "|" + courseNames[i] + "|" + lecturers[i] + "|" + deadlines[i] + "|" + subIDs[i] + "|" + statuses[i] + "|" + recommendations[i]);
                 }
             }
         }
     }
-
-    public static void sortTasks(String[] descriptions, String[] codes, String[] courseNames, String[] lecturers,
-            String[] deadlines, String[] subIDs, int[] diffs, int[] days, String[] statuses, double[] priorities,
-            String[] recommendations, int n) {
+    
+    public static void sortTasks(String[] descriptions, String[] codes, String[] courseNames, String[] lecturers, String[] deadlines, String[] subIDs, int[] diffs, int[] days, String[] statuses, double[] priorities, String[] recommendations, int n) {
         int i, j;
         String tempStr;
         double tempReal;
@@ -170,7 +154,7 @@ public class TLAST {
             }
         }
     }
-
+    
     public static void updateStatus(String[] codes, String[] statuses, int n) {
         String searchCode, newStatus;
         int i;
@@ -183,7 +167,7 @@ public class TLAST {
             }
         }
     }
-
+    
     private static String toFixed(double value, int digits) {
         return String.format("%." + digits + "f", value);
     }

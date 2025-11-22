@@ -1,51 +1,46 @@
 <?xml version="1.0"?>
 <flowgorithm fileversion="4.2">
     <attributes>
-        <attribute name="name" value="TutorTaskManagementSystem"/>
+        <attribute name="name" value="TLAST_FINAL_V2"/>
         <attribute name="authors" value="UcokButet"/>
-        <attribute name="about" value="Task Management System with Update Feature"/>
-        <attribute name="saved" value="2025-11-21 10:00:00 PM"/>
+        <attribute name="about" value="Task Management System - Fixed Init Error"/>
+        <attribute name="saved" value="2025-11-21 09:48:10 PM"/>
+        <attribute name="created" value="SmVyZW1pO0pFUkVNSTsyMDI1LTExLTIxOzA5OjQxOjM1IFBNOzIzMjg="/>
+        <attribute name="edited" value="SmVyZW1pO0pFUkVNSTsyMDI1LTExLTIxOzA5OjQ4OjEwIFBNOzE7MjQzNg=="/>
     </attributes>
-    
     <function name="Main" type="None" variable="">
         <parameters/>
         <body>
-            <declare name="descriptions" type="String" array="True" size="10"/>
-            <declare name="codes" type="String" array="True" size="10"/>
-            <declare name="courseNames" type="String" array="True" size="10"/>
-            <declare name="lecturers" type="String" array="True" size="10"/>
-            <declare name="deadlines" type="String" array="True" size="10"/>
-            <declare name="subIDs" type="String" array="True" size="10"/>
+            <declare name="descriptions, codes, courseNames, lecturers, deadlines, subIDs, statuses" type="String" array="True" size="10"/>
             <declare name="diffs" type="Integer" array="True" size="10"/>
             <declare name="days" type="Integer" array="True" size="10"/>
-            <declare name="statuses" type="String" array="True" size="10"/>
             <declare name="priorities" type="Real" array="True" size="10"/>
-            <declare name="n" type="Integer" array="False" size=""/>
-            <assign variable="n" expression="0"/>
+            <declare name="recommendations" type="String" array="True" size="10"/>
             <declare name="command" type="String" array="False" size=""/>
-            <assign variable="command" expression="&quot;&quot;"/>
-            
-            <while expression="command != &quot;---&quot;">
+            <declare name="i, n" type="Integer" array="False" size=""/>
+            <assign variable="n" expression="0"/>
+            <call expression="Initialize(descriptions, codes, courseNames, lecturers, deadlines, subIDs, diffs, days, statuses, priorities, recommendations)"/>
+            <for variable="i" start="0" end="9" direction="inc" step="1">
                 <input variable="command"/>
-                <if expression="command == &quot;---&quot;">
+                <if expression="command == &quot;Add task&quot;">
                     <then>
-                        <break/>
+                        <assign variable="n" expression="AddTask(descriptions, codes, courseNames, lecturers, deadlines, subIDs, diffs, days, statuses, priorities, recommendations, i, n)"/>
                     </then>
                     <else>
-                        <if expression="command == &quot;Add task&quot;">
+                        <if expression="command == &quot;Update task status&quot;">
                             <then>
-                                <call expression="AddTask(n, descriptions, codes, courseNames, lecturers, deadlines, subIDs, diffs, days, statuses, priorities)"/>
+                                <call expression="UpdateStatus(codes, statuses, n)"/>
+                                <assign variable="i" expression="i - 1"/>
                             </then>
                             <else>
-                                <if expression="command == &quot;Update task status&quot;">
+                                <if expression="command == &quot;Show assigment&quot; || command == &quot;Show assignment&quot;">
                                     <then>
-                                        <call expression="UpdateTask(n, codes, statuses)"/>
+                                        <assign variable="i" expression="i - 1"/>
                                     </then>
                                     <else>
-                                        <if expression="command == &quot;Show assigment&quot; OR command == &quot;Show assignment&quot;">
+                                        <if expression="command == &quot;---&quot;">
                                             <then>
-                                                <call expression="SortTasks(n, priorities, descriptions, codes, courseNames, lecturers, deadlines, subIDs, statuses, diffs, days)"/>
-                                                <call expression="ShowAssignment(n, descriptions, codes, courseNames, lecturers, deadlines, subIDs, statuses, priorities)"/>
+                                                <assign variable="i" expression="10"/>
                                             </then>
                                             <else/>
                                         </if>
@@ -55,13 +50,13 @@
                         </if>
                     </else>
                 </if>
-            </while>
+            </for>
+            <call expression="SortTasks(descriptions, codes, courseNames, lecturers, deadlines, subIDs, diffs, days, statuses, priorities, recommendations, n)"/>
+            <call expression="ShowAssignment(descriptions, codes, courseNames, lecturers, deadlines, subIDs, statuses, priorities, recommendations, n)"/>
         </body>
     </function>
-
-    <function name="AddTask" type="None" variable="">
+    <function name="AddTask" type="Integer" variable="n">
         <parameters>
-            <parameter name="n" type="Integer" array="False"/>
             <parameter name="descriptions" type="String" array="True"/>
             <parameter name="codes" type="String" array="True"/>
             <parameter name="courseNames" type="String" array="True"/>
@@ -72,154 +67,110 @@
             <parameter name="days" type="Integer" array="True"/>
             <parameter name="statuses" type="String" array="True"/>
             <parameter name="priorities" type="Real" array="True"/>
-        </parameters>
-        <body>
-            <if expression="n &lt; 10">
-                <then>
-                    <input variable="descriptions[n]"/>
-                    <input variable="codes[n]"/>
-                    <input variable="courseNames[n]"/>
-                    <input variable="lecturers[n]"/>
-                    <input variable="deadlines[n]"/>
-                    <input variable="subIDs[n]"/>
-                    <input variable="diffs[n]"/>
-                    <input variable="days[n]"/>
-                    <input variable="statuses[n]"/>
-                    
-                    <if expression="days[n] == 0">
-                        <then>
-                            <assign variable="priorities[n]" expression="diffs[n] * 1.0"/>
-                        </then>
-                        <else>
-                            <assign variable="priorities[n]" expression="diffs[n] * (1.0 / days[n])"/>
-                        </else>
-                    </if>
-                    <assign variable="n" expression="n + 1"/>
-                </then>
-                <else/>
-            </if>
-        </body>
-    </function>
-
-    <function name="ShowAssignment" type="None" variable="">
-        <parameters>
+            <parameter name="recommendations" type="String" array="True"/>
+            <parameter name="i" type="Integer" array="False"/>
             <parameter name="n" type="Integer" array="False"/>
-            <parameter name="descriptions" type="String" array="True"/>
-            <parameter name="codes" type="String" array="True"/>
-            <parameter name="courseNames" type="String" array="True"/>
-            <parameter name="lecturers" type="String" array="True"/>
-            <parameter name="deadlines" type="String" array="True"/>
-            <parameter name="subIDs" type="String" array="True"/>
-            <parameter name="statuses" type="String" array="True"/>
-            <parameter name="priorities" type="Real" array="True"/>
         </parameters>
         <body>
-            <declare name="i" type="Integer" array="False" size=""/>
-            <declare name="rekomendasi" type="String" array="False" size=""/>
-            
-            <if expression="n == 0">
+            <input variable="descriptions[i]"/>
+            <input variable="codes[i]"/>
+            <input variable="courseNames[i]"/>
+            <input variable="lecturers[i]"/>
+            <input variable="deadlines[i]"/>
+            <input variable="subIDs[i]"/>
+            <input variable="diffs[i]"/>
+            <input variable="days[i]"/>
+            <input variable="statuses[i]"/>
+            <if expression="days[i] == 0">
                 <then>
-                    <output expression="&quot;Tidak ada tugas yang tersedia.&quot;" newline="True"/>
+                    <assign variable="priorities[i]" expression="diffs[i] * 1.0"/>
                 </then>
                 <else>
-                    <for variable="i" start="0" end="n - 1" direction="inc" step="1">
-                        <assign variable="rekomendasi" expression="&quot;&quot;"/>
-                        
-                        <output expression="&quot;Prioritas: &quot; &amp; ToFixed(priorities[i], 2)" newline="True"/>
-                        
-                        <if expression="statuses[i] == &quot;Selesai&quot;">
-                            <then>
-                                <output expression="descriptions[i] &amp; &quot;|&quot; &amp; codes[i] &amp; &quot;|&quot; &amp; courseNames[i] &amp; &quot;|&quot; &amp; lecturers[i] &amp; &quot;|&quot; &amp; subIDs[i] &amp; &quot;|&quot; &amp; statuses[i]" newline="True"/>
-                            </then>
-                            <else>
-                                <if expression="priorities[i] &gt; 3">
-                                    <then>
-                                        <assign variable="rekomendasi" expression="&quot;Penting! Anda harus mengerjakan tugas ini segera&quot;"/>
-                                    </then>
-                                    <else>
-                                        <if expression="priorities[i] &gt;= 1.5 AND priorities[i] &lt;= 3">
-                                            <then>
-                                                <assign variable="rekomendasi" expression="&quot;Tugas ini memiliki prioritas menengah&quot;"/>
-                                            </then>
-                                            <else>
-                                                <assign variable="rekomendasi" expression="&quot;Tugas ini relatif ringan, namun jangan tunda terlalu lama&quot;"/>
-                                            </else>
-                                        </if>
-                                    </else>
-                                </if>
-                                <output expression="descriptions[i] &amp; &quot;|&quot; &amp; codes[i] &amp; &quot;|&quot; &amp; courseNames[i] &amp; &quot;|&quot; &amp; lecturers[i] &amp; &quot;|&quot; &amp; deadlines[i] &amp; &quot;|&quot; &amp; subIDs[i] &amp; &quot;|&quot; &amp; statuses[i] &amp; &quot;|&quot; &amp; rekomendasi" newline="True"/>
-                            </else>
-                        </if>
-                    </for>
+                    <assign variable="priorities[i]" expression="diffs[i] * (1.0 / days[i])"/>
                 </else>
             </if>
+            <if expression="priorities[i] &gt; 3">
+                <then>
+                    <assign variable="recommendations[i]" expression="&quot;Penting! Anda harus mengerjakan tugas ini segera&quot;"/>
+                </then>
+                <else>
+                    <if expression="priorities[i] &lt;= 3 AND priorities[i] &gt;= 1.5">
+                        <then>
+                            <assign variable="recommendations[i]" expression="&quot;Tugas ini memiliki prioritas menengah&quot;"/>
+                        </then>
+                        <else>
+                            <if expression="priorities[i] &lt; 1.5">
+                                <then>
+                                    <assign variable="recommendations[i]" expression="&quot;Tugas ini relatif ringan, namun jangan tunda terlalu lama&quot;"/>
+                                </then>
+                                <else>
+                                    <assign variable="recommendations[i]" expression="&quot;---&quot;"/>
+                                </else>
+                            </if>
+                        </else>
+                    </if>
+                </else>
+            </if>
+            <assign variable="n" expression="n + 1"/>
         </body>
     </function>
-
     <function name="SortTasks" type="None" variable="">
         <parameters>
-            <parameter name="n" type="Integer" array="False"/>
-            <parameter name="priorities" type="Real" array="True"/>
             <parameter name="descriptions" type="String" array="True"/>
             <parameter name="codes" type="String" array="True"/>
             <parameter name="courseNames" type="String" array="True"/>
             <parameter name="lecturers" type="String" array="True"/>
             <parameter name="deadlines" type="String" array="True"/>
             <parameter name="subIDs" type="String" array="True"/>
-            <parameter name="statuses" type="String" array="True"/>
             <parameter name="diffs" type="Integer" array="True"/>
             <parameter name="days" type="Integer" array="True"/>
+            <parameter name="statuses" type="String" array="True"/>
+            <parameter name="priorities" type="Real" array="True"/>
+            <parameter name="recommendations" type="String" array="True"/>
+            <parameter name="n" type="Integer" array="False"/>
         </parameters>
         <body>
-            <declare name="i" type="Integer" array="False" size=""/>
-            <declare name="j" type="Integer" array="False" size=""/>
+            <declare name="i, j" type="Integer" array="False" size=""/>
             <declare name="tempStr" type="String" array="False" size=""/>
             <declare name="tempReal" type="Real" array="False" size=""/>
             <declare name="tempInt" type="Integer" array="False" size=""/>
-            
-            <for variable="i" start="0" end="n - 1" direction="inc" step="1">
-                <for variable="j" start="0" end="n - 2 - i" direction="inc" step="1">
-                    <if expression="priorities[j] &lt; priorities[j+1]">
+            <for variable="i" start="0" end="n-1" direction="inc" step="1">
+                <for variable="j" start="i + 1" end="n - 1" direction="inc" step="1">
+                    <if expression="priorities[i] &lt; priorities[j]">
                         <then>
-                            <assign variable="tempReal" expression="priorities[j]"/>
-                            <assign variable="priorities[j]" expression="priorities[j+1]"/>
-                            <assign variable="priorities[j+1]" expression="tempReal"/>
-                            
                             <assign variable="tempStr" expression="descriptions[j]"/>
-                            <assign variable="descriptions[j]" expression="descriptions[j+1]"/>
-                            <assign variable="descriptions[j+1]" expression="tempStr"/>
-                            
+                            <assign variable="descriptions[j]" expression="descriptions[i]"/>
+                            <assign variable="descriptions[i]" expression="tempStr"/>
                             <assign variable="tempStr" expression="codes[j]"/>
-                            <assign variable="codes[j]" expression="codes[j+1]"/>
-                            <assign variable="codes[j+1]" expression="tempStr"/>
-                            
+                            <assign variable="codes[j]" expression="codes[i]"/>
+                            <assign variable="codes[i]" expression="tempStr"/>
                             <assign variable="tempStr" expression="courseNames[j]"/>
-                            <assign variable="courseNames[j]" expression="courseNames[j+1]"/>
-                            <assign variable="courseNames[j+1]" expression="tempStr"/>
-                            
+                            <assign variable="courseNames[j]" expression="courseNames[i]"/>
+                            <assign variable="courseNames[i]" expression="tempStr"/>
                             <assign variable="tempStr" expression="lecturers[j]"/>
-                            <assign variable="lecturers[j]" expression="lecturers[j+1]"/>
-                            <assign variable="lecturers[j+1]" expression="tempStr"/>
-                            
+                            <assign variable="lecturers[j]" expression="lecturers[i]"/>
+                            <assign variable="lecturers[i]" expression="tempStr"/>
                             <assign variable="tempStr" expression="deadlines[j]"/>
-                            <assign variable="deadlines[j]" expression="deadlines[j+1]"/>
-                            <assign variable="deadlines[j+1]" expression="tempStr"/>
-                            
+                            <assign variable="deadlines[j]" expression="deadlines[i]"/>
+                            <assign variable="deadlines[i]" expression="tempStr"/>
                             <assign variable="tempStr" expression="subIDs[j]"/>
-                            <assign variable="subIDs[j]" expression="subIDs[j+1]"/>
-                            <assign variable="subIDs[j+1]" expression="tempStr"/>
-                            
-                            <assign variable="tempStr" expression="statuses[j]"/>
-                            <assign variable="statuses[j]" expression="statuses[j+1]"/>
-                            <assign variable="statuses[j+1]" expression="tempStr"/>
-                            
+                            <assign variable="subIDs[j]" expression="subIDs[i]"/>
+                            <assign variable="subIDs[i]" expression="tempStr"/>
                             <assign variable="tempInt" expression="diffs[j]"/>
-                            <assign variable="diffs[j]" expression="diffs[j+1]"/>
-                            <assign variable="diffs[j+1]" expression="tempInt"/>
-                            
+                            <assign variable="diffs[j]" expression="diffs[i]"/>
+                            <assign variable="diffs[i]" expression="tempInt"/>
                             <assign variable="tempInt" expression="days[j]"/>
-                            <assign variable="days[j]" expression="days[j+1]"/>
-                            <assign variable="days[j+1]" expression="tempInt"/>
+                            <assign variable="days[j]" expression="days[i]"/>
+                            <assign variable="days[i]" expression="tempInt"/>
+                            <assign variable="tempStr" expression="statuses[j]"/>
+                            <assign variable="statuses[j]" expression="statuses[i]"/>
+                            <assign variable="statuses[i]" expression="tempStr"/>
+                            <assign variable="tempReal" expression="priorities[j]"/>
+                            <assign variable="priorities[j]" expression="priorities[i]"/>
+                            <assign variable="priorities[i]" expression="tempReal"/>
+                            <assign variable="tempStr" expression="recommendations[j]"/>
+                            <assign variable="recommendations[j]" expression="recommendations[i]"/>
+                            <assign variable="recommendations[i]" expression="tempStr"/>
                         </then>
                         <else/>
                     </if>
@@ -227,24 +178,85 @@
             </for>
         </body>
     </function>
-
-    <function name="UpdateTask" type="None" variable="">
+    <function name="Initialize" type="None" variable="">
         <parameters>
-            <parameter name="n" type="Integer" array="False"/>
+            <parameter name="descriptions" type="String" array="True"/>
             <parameter name="codes" type="String" array="True"/>
+            <parameter name="courseNames" type="String" array="True"/>
+            <parameter name="lecturers" type="String" array="True"/>
+            <parameter name="deadlines" type="String" array="True"/>
+            <parameter name="subIDs" type="String" array="True"/>
+            <parameter name="diffs" type="Integer" array="True"/>
+            <parameter name="days" type="Integer" array="True"/>
             <parameter name="statuses" type="String" array="True"/>
+            <parameter name="priorities" type="Real" array="True"/>
+            <parameter name="recommendations" type="String" array="True"/>
         </parameters>
         <body>
-            <declare name="searchCode" type="String" array="False" size=""/>
-            <declare name="newStatus" type="String" array="False" size=""/>
+            <declare name="a" type="Integer" array="False" size=""/>
+            <for variable="a" start="0" end="9" direction="inc" step="1">
+                <assign variable="descriptions[a]" expression="&quot;&quot;"/>
+                <assign variable="codes[a]" expression="&quot;&quot;"/>
+                <assign variable="courseNames[a]" expression="&quot;&quot;"/>
+                <assign variable="lecturers[a]" expression="&quot;&quot;"/>
+                <assign variable="deadlines[a]" expression="&quot;&quot;"/>
+                <assign variable="subIDs[a]" expression="&quot;&quot;"/>
+                <assign variable="diffs[a]" expression="0"/>
+                <assign variable="days[a]" expression="0"/>
+                <assign variable="statuses[a]" expression="&quot;&quot;"/>
+                <assign variable="priorities[a]" expression="0"/>
+                <assign variable="recommendations[a]" expression="&quot;&quot;"/>
+            </for>
+        </body>
+    </function>
+    <function name="ShowAssignment" type="None" variable="">
+        <parameters>
+            <parameter name="descriptions" type="String" array="True"/>
+            <parameter name="codes" type="String" array="True"/>
+            <parameter name="courseNames" type="String" array="True"/>
+            <parameter name="lecturers" type="String" array="True"/>
+            <parameter name="deadlines" type="String" array="True"/>
+            <parameter name="subIDs" type="String" array="True"/>
+            <parameter name="statuses" type="String" array="True"/>
+            <parameter name="priorities" type="Real" array="True"/>
+            <parameter name="recommendations" type="String" array="True"/>
+            <parameter name="n" type="Integer" array="False"/>
+        </parameters>
+        <body>
             <declare name="i" type="Integer" array="False" size=""/>
-            
-            <input variable="searchCode"/>
-            <input variable="newStatus"/>
-            
             <for variable="i" start="0" end="n - 1" direction="inc" step="1">
-                <if expression="codes[i] == searchCode">
+                <if expression="statuses[i] == &quot;Selesai&quot;">
                     <then>
+                        <output expression="&quot;Prioritas: &quot; &amp; ToFixed(priorities[i], 2)" newline="True"/>
+                        <output expression="descriptions[i] &amp; &quot;|&quot; &amp; codes[i] &amp; &quot;|&quot; &amp; courseNames[i] &amp; &quot;|&quot; &amp; lecturers[i] &amp; &quot;|&quot; &amp; subIDs[i] &amp; &quot;|&quot; &amp; statuses[i]" newline="True"/>
+                    </then>
+                    <else>
+                        <if expression="statuses[i] == &quot;Belum Selesai&quot;">
+                            <then>
+                                <output expression="&quot;Prioritas: &quot; &amp; ToFixed(priorities[i], 2)" newline="True"/>
+                                <output expression="descriptions[i] &amp; &quot;|&quot; &amp; codes[i] &amp; &quot;|&quot; &amp; courseNames[i] &amp; &quot;|&quot; &amp; lecturers[i] &amp; &quot;|&quot; &amp; deadlines[i] &amp; &quot;|&quot; &amp; subIDs[i] &amp; &quot;|&quot; &amp; statuses[i] &amp; &quot;|&quot; &amp; recommendations[i]" newline="True"/>
+                            </then>
+                            <else/>
+                        </if>
+                    </else>
+                </if>
+            </for>
+        </body>
+    </function>
+    <function name="UpdateStatus" type="None" variable="">
+        <parameters>
+            <parameter name="codes" type="String" array="True"/>
+            <parameter name="statuses" type="String" array="True"/>
+            <parameter name="n" type="Integer" array="False"/>
+        </parameters>
+        <body>
+            <declare name="searchCode, newStatus" type="String" array="False" size=""/>
+            <declare name="i" type="Integer" array="False" size=""/>
+            <input variable="searchCode"/>
+            <for variable="i" start="0" end="n-1" direction="inc" step="1">
+                <if expression="searchCode == codes[i]">
+                    <then>
+                        <input variable="newStatus"/>
                         <assign variable="statuses[i]" expression="newStatus"/>
                     </then>
                     <else/>
