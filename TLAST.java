@@ -24,7 +24,7 @@ public class TLAST {
         String command;
 
         command = "";
-        while (!command.equals("---") && n < 10) {
+        while (!command.equals("---")) {
             command = input.nextLine();
             if (command.equals("---")) {
 
@@ -53,25 +53,20 @@ public class TLAST {
             String[] deadlines, String[] subIDs, int[] diffs, int[] days, String[] statuses, double[] priorities) {
         if (n < 10) {
             descriptions[n] = input.nextLine();
-            if (descriptions[n].equals("---")) {
-
-                // Unsupported shape: break
+            codes[n] = input.nextLine();
+            courseNames[n] = input.nextLine();
+            lecturers[n] = input.nextLine();
+            deadlines[n] = input.nextLine();
+            subIDs[n] = input.nextLine();
+            diffs[n] = Integer.parseInt(input.nextLine());
+            days[n] = Integer.parseInt(input.nextLine());
+            statuses[n] = input.nextLine();
+            if (days[n] == 0) {
+                priorities[n] = diffs[n] * 1.0;
             } else {
-                codes[n] = input.nextLine();
-                courseNames[n] = input.nextLine();
-                lecturers[n] = input.nextLine();
-                deadlines[n] = input.nextLine();
-                subIDs[n] = input.nextLine();
-                diffs[n] = Integer.parseInt(input.nextLine());
-                days[n] = Integer.parseInt(input.nextLine());
-                statuses[n] = input.nextLine();
-                if (days[n] == 0) {
-                    priorities[n] = diffs[n] * 1.0;
-                } else {
-                    priorities[n] = diffs[n] * 1.0 / days[n];
-                }
-                n = n + 1;
+                priorities[n] = diffs[n] * 1.0 / days[n];
             }
+            n = n + 1;
         }
     }
 
@@ -85,7 +80,11 @@ public class TLAST {
         } else {
             for (i = 0; i <= n - 1; i++) {
                 rekomendasi = "";
-                if (!statuses[i].equals("Selesai")) {
+                System.out.println("Prioritas: " + toFixed(priorities[i], 2));
+                if (statuses[i].equals("Selesai")) {
+                    System.out.println(descriptions[i] + "|" + codes[i] + "|" + courseNames[i] + "|" + lecturers[i]
+                            + "|" + subIDs[i] + "|" + statuses[i]);
+                } else {
                     if (priorities[i] > 3) {
                         rekomendasi = "Penting! Anda harus mengerjakan tugas ini segera";
                     } else {
@@ -95,12 +94,6 @@ public class TLAST {
                             rekomendasi = "Tugas ini relatif ringan, namun jangan tunda terlalu lama";
                         }
                     }
-                }
-                System.out.println("Prioritas: " + toFixed(priorities[i], 2));
-                if (statuses[i].equals("Selesai")) {
-                    System.out.println(descriptions[i] + "|" + codes[i] + "|" + courseNames[i] + "|" + lecturers[i]
-                            + "|" + subIDs[i] + "|" + statuses[i]);
-                } else {
                     System.out.println(descriptions[i] + "|" + codes[i] + "|" + courseNames[i] + "|" + lecturers[i]
                             + "|" + deadlines[i] + "|" + subIDs[i] + "|" + statuses[i] + "|" + rekomendasi);
                 }
@@ -159,19 +152,13 @@ public class TLAST {
         String searchCode;
         String newStatus;
         int i;
-        int found;
 
-        found = 0;
         searchCode = input.nextLine();
         newStatus = input.nextLine();
         for (i = 0; i <= n - 1; i++) {
             if (codes[i].equals(searchCode)) {
                 statuses[i] = newStatus;
-                found = 1;
             }
-        }
-        if (found == 0) {
-            System.out.println("Kode tugas tidak ditemukan");
         }
     }
 

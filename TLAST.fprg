@@ -25,7 +25,7 @@
             <declare name="command" type="String" array="False" size=""/>
             <assign variable="command" expression="&quot;&quot;"/>
             
-            <while expression="command != &quot;---&quot; AND n &lt; 10">
+            <while expression="command != &quot;---&quot;">
                 <input variable="command"/>
                 <if expression="command == &quot;---&quot;">
                     <then>
@@ -77,31 +77,24 @@
             <if expression="n &lt; 10">
                 <then>
                     <input variable="descriptions[n]"/>
-                    <if expression="descriptions[n] == &quot;---&quot;">
+                    <input variable="codes[n]"/>
+                    <input variable="courseNames[n]"/>
+                    <input variable="lecturers[n]"/>
+                    <input variable="deadlines[n]"/>
+                    <input variable="subIDs[n]"/>
+                    <input variable="diffs[n]"/>
+                    <input variable="days[n]"/>
+                    <input variable="statuses[n]"/>
+                    
+                    <if expression="days[n] == 0">
                         <then>
-                            <break/>
+                            <assign variable="priorities[n]" expression="diffs[n] * 1.0"/>
                         </then>
                         <else>
-                            <input variable="codes[n]"/>
-                            <input variable="courseNames[n]"/>
-                            <input variable="lecturers[n]"/>
-                            <input variable="deadlines[n]"/>
-                            <input variable="subIDs[n]"/>
-                            <input variable="diffs[n]"/>
-                            <input variable="days[n]"/>
-                            <input variable="statuses[n]"/>
-                            
-                            <if expression="days[n] == 0">
-                                <then>
-                                    <assign variable="priorities[n]" expression="diffs[n] * 1.0"/>
-                                </then>
-                                <else>
-                                    <assign variable="priorities[n]" expression="diffs[n] * (1.0 / days[n])"/>
-                                </else>
-                            </if>
-                            <assign variable="n" expression="n + 1"/>
+                            <assign variable="priorities[n]" expression="diffs[n] * (1.0 / days[n])"/>
                         </else>
                     </if>
+                    <assign variable="n" expression="n + 1"/>
                 </then>
                 <else/>
             </if>
@@ -132,8 +125,13 @@
                     <for variable="i" start="0" end="n - 1" direction="inc" step="1">
                         <assign variable="rekomendasi" expression="&quot;&quot;"/>
                         
-                        <if expression="statuses[i] != &quot;Selesai&quot;">
+                        <output expression="&quot;Prioritas: &quot; &amp; ToFixed(priorities[i], 2)" newline="True"/>
+                        
+                        <if expression="statuses[i] == &quot;Selesai&quot;">
                             <then>
+                                <output expression="descriptions[i] &amp; &quot;|&quot; &amp; codes[i] &amp; &quot;|&quot; &amp; courseNames[i] &amp; &quot;|&quot; &amp; lecturers[i] &amp; &quot;|&quot; &amp; subIDs[i] &amp; &quot;|&quot; &amp; statuses[i]" newline="True"/>
+                            </then>
+                            <else>
                                 <if expression="priorities[i] &gt; 3">
                                     <then>
                                         <assign variable="rekomendasi" expression="&quot;Penting! Anda harus mengerjakan tugas ini segera&quot;"/>
@@ -149,17 +147,6 @@
                                         </if>
                                     </else>
                                 </if>
-                            </then>
-                            <else/>
-                        </if>
-                        
-                        <output expression="&quot;Prioritas: &quot; &amp; ToFixed(priorities[i], 2)" newline="True"/>
-                        
-                        <if expression="statuses[i] == &quot;Selesai&quot;">
-                            <then>
-                                <output expression="descriptions[i] &amp; &quot;|&quot; &amp; codes[i] &amp; &quot;|&quot; &amp; courseNames[i] &amp; &quot;|&quot; &amp; lecturers[i] &amp; &quot;|&quot; &amp; subIDs[i] &amp; &quot;|&quot; &amp; statuses[i]" newline="True"/>
-                            </then>
-                            <else>
                                 <output expression="descriptions[i] &amp; &quot;|&quot; &amp; codes[i] &amp; &quot;|&quot; &amp; courseNames[i] &amp; &quot;|&quot; &amp; lecturers[i] &amp; &quot;|&quot; &amp; deadlines[i] &amp; &quot;|&quot; &amp; subIDs[i] &amp; &quot;|&quot; &amp; statuses[i] &amp; &quot;|&quot; &amp; rekomendasi" newline="True"/>
                             </else>
                         </if>
@@ -251,8 +238,6 @@
             <declare name="searchCode" type="String" array="False" size=""/>
             <declare name="newStatus" type="String" array="False" size=""/>
             <declare name="i" type="Integer" array="False" size=""/>
-            <declare name="found" type="Integer" array="False" size=""/>
-            <assign variable="found" expression="0"/>
             
             <input variable="searchCode"/>
             <input variable="newStatus"/>
@@ -261,18 +246,10 @@
                 <if expression="codes[i] == searchCode">
                     <then>
                         <assign variable="statuses[i]" expression="newStatus"/>
-                        <assign variable="found" expression="1"/>
                     </then>
                     <else/>
                 </if>
             </for>
-            
-            <if expression="found == 0">
-                <then>
-                    <output expression="&quot;Kode tugas tidak ditemukan&quot;" newline="True"/>
-                </then>
-                <else/>
-            </if>
         </body>
     </function>
 </flowgorithm>
